@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.20450.svg)](http://dx.doi.org/10.5281/zenodo.20450)
+
 # DEHam
 
 Double Exchange Hamiltonian: Complete Version
@@ -54,3 +56,8 @@ Double Exchange Hamiltonian: Complete Version
 	```shell
 	mpiexec -n [nprocs] ./ex1 inpfile 
 	```
+
+4. Publications using this code
+-------------------------------
+
+  1. High-Spin Chains and Crowns from Double-Exchange Mechanism [doi:10.3390/cryst6040039](http://www.dx.doi.org/10.3390/cryst6040039)
