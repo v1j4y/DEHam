@@ -8,8 +8,8 @@ I. Compiling
 
 1. Export environment variables for PETSc and SLEPc
 ```shell
-export PETSC_DIR=/usr/local/Cellar/petsc/3.6.3_4/real
-export SLEPC_DIR=/usr/local/Cellar/slepc/3.6.2_1/real/
+export PETSC_DIR=${PATH_TO_PETSC_INSTALLATION}
+export SLEPC_DIR=${PATH_TO_SLEPC_INSTALLATION}
 ```
 
 2. Make the executable
