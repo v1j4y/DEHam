@@ -17,12 +17,12 @@ Double Exchange Hamiltonian: Complete Version
 ```shell
 export PETSC_DIR=${PATH_TO_PETSC_INSTALLATION}
 export SLEPC_DIR=${PATH_TO_SLEPC_INSTALLATION}
-```
+```shell
 
   2. Make the executable
 ```shell
 make ex1
-```
+```shell
 
 3. Using DEHam
 ---------------
