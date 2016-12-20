@@ -3,6 +3,8 @@
 Double Exchange Hamiltonian: Complete Version
 =============================================
 
+(under GNU GENERAL PUBLIC LICENSE v2)
+
 1. Dependencies
 ---------------
 
