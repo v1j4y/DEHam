@@ -3,31 +3,31 @@
 Double Exchange Hamiltonian: Complete Version
 =============================================
 
-O. Dependencies
+1. Dependencies
 ---------------
 
-1. [PETSc](https://www.mcs.anl.gov/petsc/documentation/installation.html) and [SLEPc](http://slepc.upv.es/documentation/current/docs/instal.htm)
+..1. [PETSc](https://www.mcs.anl.gov/petsc/documentation/installation.html) and [SLEPc](http://slepc.upv.es/documentation/current/docs/instal.htm)
 
-2. [IRPF90](https://github.com/scemama/irpf90)
+..2. [IRPF90](https://github.com/scemama/irpf90)
 
-I. Compiling
+2. Compiling
 ------------
 
-1. Export environment variables for PETSc and SLEPc
+..1. Export environment variables for PETSc and SLEPc
 ```shell
 export PETSC_DIR=${PATH_TO_PETSC_INSTALLATION}
 export SLEPC_DIR=${PATH_TO_SLEPC_INSTALLATION}
 ```
 
-2. Make the executable
+..2. Make the executable
 ```shell
 make ex1
 ```
 
-II. Using DEHam
+3. Using DEHam
 ---------------
 
-1. The DEHam program requires an input file which 
+..1. The DEHam program requires an input file which 
    has the topology of the Hamiltonian and the various parameters
    as explained below in a sample inputfile:
 
@@ -45,7 +45,7 @@ II. Using DEHam
 -1.00,0.0,0.00		# This line gives t
 ```
 
-2. running DEHam
+..2. running DEHam
 ```shell
 mpiexec -n [nprocs] ./ex1 inpfile 
 ```
