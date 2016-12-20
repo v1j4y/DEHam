@@ -1,5 +1,5 @@
 include ${SLEPC_DIR}/lib/slepc/conf/slepc_common
-CC=gcc-5
+CC=gcc
 MAKE = /usr/bin/make
 MKDIR_P = mkdir -p
 OBJ_DIR = obj
