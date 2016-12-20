@@ -1,11 +1,18 @@
 include ${SLEPC_DIR}/lib/slepc/conf/slepc_common
 CC=gcc-5
 MAKE = /usr/bin/make
+MKDIR_P = mkdir -p
+OBJ_DIR = obj
 
 irpf90.a:
-	cd src && $(MAKE) && cp irpf90.a ../
+	cd src && irpf90 init && $(MAKE) && cp irpf90.a ../
 
-obj/read2.o: src/read2.c
+${OBJ_DIR}:
+	${MKDIR_P} ${OBJ_DIR}
+
+directories: ${OBJ_DIR}
+
+obj/read2.o: src/read2.c directories
 	${CC} -c -o $@ $<
 
 obj/ex1.o: src/ex1.c
