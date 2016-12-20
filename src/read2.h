@@ -14,6 +14,7 @@ typedef struct {
 	double	xjjz[700];
 	double	xjjxy[700]; 
 	double	xtt[700]; 
+	long int nroots;
 
 } Data ;
 

@@ -17,7 +17,7 @@ void Data_new(FILE* file, Data* dat) {
 	
 	    /* note that fgets don't strip the terminating \n, checking its
 	       presence would allow to handle lines longer that sizeof(line) */
-	  if (count != 11){
+	  if (count != 12){
 			count++;
 			switch(count){
 				case 1:
@@ -178,6 +178,9 @@ void Data_new(FILE* file, Data* dat) {
 					    dat->xtt[arrayIdx++] = val;
 					  }
 					}
+					break;
+                                case 12:
+					dat->nroots=atol(line);
 					break;
 		} /* end of switch */
 

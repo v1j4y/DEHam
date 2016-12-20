@@ -124,12 +124,13 @@ int main(int argc,char **argv)
   ierr = EPSSetWhichEigenpairs(eps,EPS_SMALLEST_REAL);CHKERRQ(ierr);
 
   ierr = EPSSetFromOptions(eps);CHKERRQ(ierr);
-  tol = 1.e-8;
+  tol = 1.e-9;
   maxit = 10000000;
   ierr = EPSSetTolerances(eps,tol,maxit);CHKERRQ(ierr);
   nev  = 4;
   ncv  = 10;
   mpd  = 10;
+  nev  = getdata.nroots;
   ierr = EPSSetDimensions(eps,nev,PETSC_DECIDE,PETSC_DECIDE);CHKERRQ(ierr);
 
   ierr = PetscTime(&t1);CHKERRQ(ierr);
@@ -156,7 +157,7 @@ int main(int argc,char **argv)
          "           k          ||Ax-kx||/||kx||\n"
          "   ----------------- ------------------\n");CHKERRQ(ierr);
 
-    for (i=0;i<nconv;i++) {
+    for (i=0;i<nev;i++) {
       /*
         Get converged eigenpairs: i-th eigenvalue is stored in kr (real part) and
         ki (imaginary part)
