@@ -44,3 +44,8 @@ II. Using DEHam
 .1430,-0.20,0.0000	# 
 -1.00,0.0,0.00		# This line gives t
 ```
+
+2. running DEHam
+```shell
+mpiexec -n [nprocs] ./ex1 inpfile 
+```
