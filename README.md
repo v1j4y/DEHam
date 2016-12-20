@@ -3,6 +3,13 @@
 Double Exchange Hamiltonian: Complete Version
 =============================================
 
+O. Dependencies
+---------------
+
+1. [PETSc](https://www.mcs.anl.gov/petsc/documentation/installation.html) and [SLEPc](http://slepc.upv.es/documentation/current/docs/instal.htm)
+
+2. [IRPF90](https://github.com/scemama/irpf90)
+
 I. Compiling
 ------------
 
