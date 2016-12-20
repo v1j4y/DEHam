@@ -58,4 +58,4 @@ Double Exchange Hamiltonian: Complete Version
 4. Publications using this code
 -------------------------------
 
-  1. High-Spin Chains and Crowns from Double-Exchange Mechanism [doi:10.3390/cryst6040039](www.dx.doi.org/10.3390/cryst6040039)
+  1. High-Spin Chains and Crowns from Double-Exchange Mechanism [doi:10.3390/cryst6040039](http://www.dx.doi.org/10.3390/cryst6040039)
