@@ -54,3 +54,8 @@ Double Exchange Hamiltonian: Complete Version
 	```shell
 	mpiexec -n [nprocs] ./ex1 inpfile 
 	```
+
+4. Publications
+---------------
+
+  1. High-Spin Chains and Crowns from Double-Exchange Mechanism [doi:10.3390/cryst6040039](dx.doi.org/10.3390/cryst6040039)
