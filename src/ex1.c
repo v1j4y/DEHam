@@ -210,7 +210,7 @@ int main(int argc,char **argv)
   	PetscViewerSetFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
   	PetscViewerSetFormat(viewer,PETSC_VIEWER_ASCII_SYMMODU);
     EPSIsHermitian(eps,&ishermitian);
-    for (i=0;i<nconv;i++) {
+    for (i=0;i<nev;i++) {
       EPSGetEigenvector(eps,i,xr,xi);
       VecView(xr,viewer);
 #if !defined(PETSC_USE_COMPLEX)
@@ -226,18 +226,24 @@ int main(int argc,char **argv)
 
   if (nconv>0) {
 
+   for(i=0;i<nev;i++){
+
       /*
         Get converged eigenpairs: i-th eigenvalue is stored in kr (real part) and
         ki (imaginary part)
       */
-      ierr = EPSGetEigenpair(eps,1,&kr,&ki,xr,xi);CHKERRQ(ierr);
+      ierr = EPSGetEigenpair(eps,i,&kr,&ki,xr,xi);CHKERRQ(ierr);
+	  xymat = 0.0;
 
 	  ierr = VecNorm(xr, NORM_2, &norm);CHKERRQ(ierr);
 	  PetscPrintf(PETSC_COMM_WORLD," Norm = %18f \n", (double)norm);
 	  norm = 0.0;
-  	  for (i=Istart; i<Iend; i+=1) {
-		  indxr[i-Istart] = i;
+
+
+  	  for (ii=Istart; ii<Iend; ii+=1) {
+		  indxr[ii-Istart] = ii;
 	  }
+
 	  ierr = VecGetValues(xr, nlocal, indxr, valxr);CHKERRQ(ierr);
   	  for (ii=Istart; ii<Iend; ii+=1) {
 //  PetscPrintf(PETSC_COMM_WORLD," Element # = %d Value = %18f \n", i, valxr[i-Istart]); 
@@ -296,7 +302,12 @@ int main(int argc,char **argv)
   if(!mpiid){
   	XS=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin/normfin)));
   }
+//PetscBarrier((PetscObject)&XS);
+//PetscPrintf(PETSC_COMM_WORLD,"\n # root = %d norm = %18f xymat =  %18f S^2 = %18f \n", i, normfin, xymatfin, XS);
   PetscPrintf(PETSC_COMM_WORLD,"\n norm = %18f xymat =  %18f S^2 = %18f \n", normfin, xymatfin, XS);
+  xymatfin = 0.0;
+  normfin = 0.0;
+  }
   }
 
   ierr = EPSDestroy(&eps);CHKERRQ(ierr);
