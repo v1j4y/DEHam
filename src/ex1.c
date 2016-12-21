@@ -24,6 +24,8 @@ int main(int argc,char **argv)
 //PetscScalar    eigr;
 //PetscScalar    eigi;
   int            mpiid;
+  int            natomax=700;
+  int			 ideter[natomax];
 
   char const* const fileName = argv[1];
   FILE* file = fopen(fileName, "r");
@@ -43,6 +45,7 @@ int main(int argc,char **argv)
   PetscBool      ishermitian;
   PetscInt       kk,ll,iii2;
   long int       iii;
+  long int		 ii;
   long int       tcountcol2,tcol[700],tcountcol[getdata.nnz];
   double         val[700];
 
@@ -228,9 +231,14 @@ int main(int argc,char **argv)
 		  indxr[i-Istart] = i;
 	  }
 	  ierr = VecGetValues(xr, nlocal, indxr, valxr);CHKERRQ(ierr);
-  	  for (i=Istart; i<Iend; i+=1) {
+  	  for (ii=Istart; ii<Iend; ii+=1) {
 //  PetscPrintf(PETSC_COMM_WORLD," Element # = %d Value = %18f \n", i, valxr[i-Istart]); 
-		  printf(" Element # = %d Value = %18f \n", i, valxr[i-Istart]); 
+		  printf("\n Element # = %ld Value = %18f \n", ii, valxr[ii-Istart]); 
+		  iii = ii+1;
+		  getdet_(&iii, ideter);
+		  for(kk=0; kk<8; kk++){
+			  printf("%d ", ideter[kk]);
+		  }
 	  }
 
     ierr = PetscPrintf(PETSC_COMM_WORLD,"\n");CHKERRQ(ierr);
