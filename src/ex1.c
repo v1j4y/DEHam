@@ -234,9 +234,6 @@ int main(int argc,char **argv)
       */
       ierr = EPSGetEigenpair(eps,i,&kr,&ki,xr,xi);CHKERRQ(ierr);
 	  xymat = 0.0;
-
-	  ierr = VecNorm(xr, NORM_2, &norm);CHKERRQ(ierr);
-	  PetscPrintf(PETSC_COMM_WORLD," Norm = %18f \n", (double)norm);
 	  norm = 0.0;
 
 
@@ -269,7 +266,7 @@ int main(int argc,char **argv)
 						  }
                     	  if(ideter[kko] == 1 && ideter[kok] == 2){
                     	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-                    	    for(kkio=1;kkio<=8;kkio++){
+                    	    for(kkio=0;kkio<=7;kkio++){
                     	      ideter2[kkio]=ideter[kkio];
 							}
                     	    ideter2[kko]=2;
@@ -280,7 +277,7 @@ int main(int argc,char **argv)
 						  }
                     	  if(ideter[kko] == 2 && ideter[kok] == 1){
                     	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-                    	    for(kkio=1;kkio<=8;kkio++){
+                    	    for(kkio=0;kkio<=7;kkio++){
                     	      ideter2[kkio]=ideter[kkio];
 							}
                     	    ideter2[kko]=1;
@@ -292,18 +289,92 @@ int main(int argc,char **argv)
 						}
 					}
 				}
+//				for(kko=4;kko<=7;kko++){
+//                	for(kok=kko;kok<=7;kok++){
+//                    	if(kok == kko && ideter[kok] != 3){
+//                    	  xmat=xmat+(3.0/4.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+//						}
+//						else{
+//                    	  if(ideter[kko] == 1 && ideter[kok] == 1){
+//                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+//						  }
+//                    	  if(ideter[kko] == 2 && ideter[kok] == 2){
+//                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+//						  }
+//                    	  if(ideter[kko] == 1 && ideter[kok] == 2){
+//                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+//                    	    for(kkio=0;kkio<=7;kkio++){
+//                    	      ideter2[kkio]=ideter[kkio];
+//							}
+//                    	    ideter2[kko]=2;
+//                    	    ideter2[kok]=1;
+//                    	    adr_(ideter2, &iaa2);
+//							iaa2 = iaa2 - 1;
+//                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
+//						  }
+//                    	  if(ideter[kko] == 2 && ideter[kok] == 1){
+//                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+//                    	    for(kkio=0;kkio<=7;kkio++){
+//                    	      ideter2[kkio]=ideter[kkio];
+//							}
+//                    	    ideter2[kko]=1;
+//                    	    ideter2[kok]=2;
+//                    	    adr_(ideter2, &iaa2);
+//							iaa2 = iaa2 - 1;
+//                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
+//						  }
+//						}
+//					}
+//				}
+//				for(kko=0;kko<=3;kko++){
+//                	for(kok=4;kok<=7;kok++){
+//                    	if(kok == kko && ideter[kok] != 3){
+//                    	  xmat=xmat+(3.0/4.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+//						}
+//						else{
+//                    	  if(ideter[kko] == 1 && ideter[kok] == 1){
+//                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+//						  }
+//                    	  if(ideter[kko] == 2 && ideter[kok] == 2){
+//                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+//						  }
+//                    	  if(ideter[kko] == 1 && ideter[kok] == 2){
+//                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+//                    	    for(kkio=0;kkio<=7;kkio++){
+//                    	      ideter2[kkio]=ideter[kkio];
+//							}
+//                    	    ideter2[kko]=2;
+//                    	    ideter2[kok]=1;
+//                    	    adr_(ideter2, &iaa2);
+//							iaa2 = iaa2 - 1;
+//                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
+//						  }
+//                    	  if(ideter[kko] == 2 && ideter[kok] == 1){
+//                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+//                    	    for(kkio=0;kkio<=7;kkio++){
+//                    	      ideter2[kkio]=ideter[kkio];
+//							}
+//                    	    ideter2[kko]=1;
+//                    	    ideter2[kok]=2;
+//                    	    adr_(ideter2, &iaa2);
+//							iaa2 = iaa2 - 1;
+//                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
+//						  }
+//						}
+//					}
+//				}
   
 //---------------------------------------
               xymat=xymat+xmat;
 	  }
   }
-  MPI_Reduce(&xymat, &xymatfin, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-  MPI_Reduce(&norm, &normfin, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+  MPI_Reduce(&xymat, &xymatfin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
+  MPI_Reduce(&norm, &normfin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
   if(!mpiid){
   	XS=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin/normfin)));
   }
-//PetscBarrier((PetscObject)&XS);
-//PetscPrintf(PETSC_COMM_WORLD,"\n # root = %d norm = %18f xymat =  %18f S^2 = %18f \n", i, normfin, xymatfin, XS);
+
+  printf("\n mpiid = %d  # root = %d norm = %18f xymat =  %18f S^2 = %18f \n", mpiid, i, norm, xymat, XS);
   PetscPrintf(PETSC_COMM_WORLD,"\n norm = %18f xymat =  %18f S^2 = %18f \n", normfin, xymatfin, XS);
   xymatfin = 0.0;
   normfin = 0.0;
