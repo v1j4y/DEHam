@@ -28,11 +28,15 @@ int main(int argc,char **argv)
   char const* const fileName = argv[1];
   FILE* file = fopen(fileName, "r");
   Data getdata;
+  PetscInt		 nlocal;
   
   Data_new(file, &getdata);
+  nlocal = getdata.n/getdata.npar;
 //printf("n=%ld\t nnz=%ld\t npar=%ld\t ntrou=%ld\t isz=%ld\n",getdata.n,getdata.nnz,getdata.npar,getdata.ntrou,getdata.isz);
 
 
+  PetscScalar	 valxr[nlocal];
+  PetscInt   	 indxr[nlocal];
 //Vec            Vr,Vi;
   char           filename[PETSC_MAX_PATH_LEN]="FIL666";
   PetscViewer    viewer;
@@ -220,9 +224,13 @@ int main(int argc,char **argv)
 
 	  ierr = VecNorm(xr, NORM_2, &norm);CHKERRQ(ierr);
 	  PetscPrintf(PETSC_COMM_WORLD," Norm = %18f \n", (double)norm);
-  	  for (i=Istart; i<Iend; i+=getdata.nnz) {
-		  ierr = VecGetValues(xr, 1, i, value);CHKERRQ(ierr)
-		  PetscPrintf(PETSC_COMM_WORLD," Element # = %d Value = %18f \n", i, value[0]); 
+  	  for (i=Istart; i<Iend; i+=1) {
+		  indxr[i-Istart] = i;
+	  }
+	  ierr = VecGetValues(xr, nlocal, indxr, valxr);CHKERRQ(ierr);
+  	  for (i=Istart; i<Iend; i+=1) {
+//  PetscPrintf(PETSC_COMM_WORLD," Element # = %d Value = %18f \n", i, valxr[i-Istart]); 
+		  printf(" Element # = %d Value = %18f \n", i, valxr[i-Istart]); 
 	  }
 
     ierr = PetscPrintf(PETSC_COMM_WORLD,"\n");CHKERRQ(ierr);
