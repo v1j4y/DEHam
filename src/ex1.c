@@ -243,29 +243,39 @@ int main(int argc,char **argv)
 
 	  ierr = VecGetValues(xr, nlocal, indxr, valxr);CHKERRQ(ierr);
   	  for (ii=Istart; ii<Iend; ii+=1) {
-//  PetscPrintf(PETSC_COMM_WORLD," Element # = %d Value = %18f \n", i, valxr[i-Istart]); 
+//        PetscPrintf(PETSC_COMM_WORLD," Element # = %d Value = %18f \n", ii, valxr[ii-Istart]); 
 		  iii = ii+1;
 		  xmat = 0.0;
 		  getdet_(&iii, ideter);
-//	  for(kk=0; kk<8; kk++){
-//		  printf("%d ", ideter[kk]);
-//	  }
+
+		  /*
+		  if(mpiid==1 && i==0){
+     	  for(kk=0; kk<=7; kk++){
+//   		  PetscPrintf(PETSC_COMM_WORLD," %d ", ideter[kk]);
+     		  printf(" %d ", ideter[kk]);
+     	  }
+//  PetscPrintf(PETSC_COMM_WORLD,"id= %d\n",mpiid);
+		  printf("id= %d\n",mpiid);
+		  }
+		  */
+
               if(1){
-                norm=norm+valxr[ii-Istart]*valxr[ii-Istart];
-				for(kko=0;kko<=7;kko++){
-                	for(kok=kko;kok<=7;kok++){
+                norm=norm+valxr[ii]*valxr[ii];
+				for(kko=0;kko<=3;kko++){
+                	for(kok=kko;kok<=3;kok++){
                     	if(kok == kko && ideter[kok] != 3){
-                    	  xmat=xmat+(3.0/4.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+                    	  xmat=xmat+(3.0/4.0)*(valxr[ii]*valxr[ii]);
+//			      if(!i)PetscPrintf(PETSC_COMM_WORLD,"i = %d ii = %d iaa2 = %d xmat = %18f xymat = %18f\n", i, ii, iaa2, xmat, xymat);
 						}
 						else{
                     	  if(ideter[kko] == 1 && ideter[kok] == 1){
-                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+                    	    xmat=xmat+(1.0/2.0)*(valxr[ii]*valxr[ii]);
 						  }
                     	  if(ideter[kko] == 2 && ideter[kok] == 2){
-                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+                    	    xmat=xmat+(1.0/2.0)*(valxr[ii]*valxr[ii]);
 						  }
                     	  if(ideter[kko] == 1 && ideter[kok] == 2){
-                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+                    	    xmat=xmat-(1.0/2.0)*(valxr[ii]*valxr[ii]);
                     	    for(kkio=0;kkio<=7;kkio++){
                     	      ideter2[kkio]=ideter[kkio];
 							}
@@ -273,10 +283,10 @@ int main(int argc,char **argv)
                     	    ideter2[kok]=1;
                     	    adr_(ideter2, &iaa2);
 							iaa2 = iaa2 - 1;
-                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
+                    	    xmat=xmat+valxr[ii]*valxr[iaa2];
 						  }
                     	  if(ideter[kko] == 2 && ideter[kok] == 1){
-                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+                    	    xmat=xmat-(1.0/2.0)*(valxr[ii]*valxr[ii]);
                     	    for(kkio=0;kkio<=7;kkio++){
                     	      ideter2[kkio]=ideter[kkio];
 							}
@@ -284,87 +294,92 @@ int main(int argc,char **argv)
                     	    ideter2[kok]=2;
                     	    adr_(ideter2, &iaa2);
 							iaa2 = iaa2 - 1;
-                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
+                    	    xmat=xmat+valxr[ii]*valxr[iaa2];
 						  }
 						}
 					}
 				}
-//				for(kko=4;kko<=7;kko++){
-//                	for(kok=kko;kok<=7;kok++){
-//                    	if(kok == kko && ideter[kok] != 3){
-//                    	  xmat=xmat+(3.0/4.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-//						}
-//						else{
-//                    	  if(ideter[kko] == 1 && ideter[kok] == 1){
-//                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-//						  }
-//                    	  if(ideter[kko] == 2 && ideter[kok] == 2){
-//                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-//						  }
-//                    	  if(ideter[kko] == 1 && ideter[kok] == 2){
-//                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-//                    	    for(kkio=0;kkio<=7;kkio++){
-//                    	      ideter2[kkio]=ideter[kkio];
-//							}
-//                    	    ideter2[kko]=2;
-//                    	    ideter2[kok]=1;
-//                    	    adr_(ideter2, &iaa2);
-//							iaa2 = iaa2 - 1;
-//                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
-//						  }
-//                    	  if(ideter[kko] == 2 && ideter[kok] == 1){
-//                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-//                    	    for(kkio=0;kkio<=7;kkio++){
-//                    	      ideter2[kkio]=ideter[kkio];
-//							}
-//                    	    ideter2[kko]=1;
-//                    	    ideter2[kok]=2;
-//                    	    adr_(ideter2, &iaa2);
-//							iaa2 = iaa2 - 1;
-//                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
-//						  }
-//						}
-//					}
-//				}
-//				for(kko=0;kko<=3;kko++){
-//                	for(kok=4;kok<=7;kok++){
-//                    	if(kok == kko && ideter[kok] != 3){
-//                    	  xmat=xmat+(3.0/4.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-//						}
-//						else{
-//                    	  if(ideter[kko] == 1 && ideter[kok] == 1){
-//                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-//						  }
-//                    	  if(ideter[kko] == 2 && ideter[kok] == 2){
-//                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-//						  }
-//                    	  if(ideter[kko] == 1 && ideter[kok] == 2){
-//                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-//                    	    for(kkio=0;kkio<=7;kkio++){
-//                    	      ideter2[kkio]=ideter[kkio];
-//							}
-//                    	    ideter2[kko]=2;
-//                    	    ideter2[kok]=1;
-//                    	    adr_(ideter2, &iaa2);
-//							iaa2 = iaa2 - 1;
-//                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
-//						  }
-//                    	  if(ideter[kko] == 2 && ideter[kok] == 1){
-//                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
-//                    	    for(kkio=0;kkio<=7;kkio++){
-//                    	      ideter2[kkio]=ideter[kkio];
-//							}
-//                    	    ideter2[kko]=1;
-//                    	    ideter2[kok]=2;
-//                    	    adr_(ideter2, &iaa2);
-//							iaa2 = iaa2 - 1;
-//                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
-//						  }
-//						}
-//					}
-//				}
+		      if(!i && mpiid == 1)printf("id = %d ii = %d  xmat = %18f xymat = %18f valxr = %18f \n", mpiid, ii-Istart, xmat, xymat, valxr[ii-Istart]);
+				for(kko=4;kko<=7;kko++){
+                	for(kok=kko;kok<=7;kok++){
+                    	if(kok == kko && ideter[kok] != 3){
+                    	  xmat=xmat+(3.0/4.0)*(valxr[ii]*valxr[ii]);
+						}
+						else{
+                    	  if(ideter[kko] == 1 && ideter[kok] == 1){
+                    	    xmat=xmat+(1.0/2.0)*(valxr[ii]*valxr[ii]);
+						  }
+                    	  if(ideter[kko] == 2 && ideter[kok] == 2){
+                    	    xmat=xmat+(1.0/2.0)*(valxr[ii]*valxr[ii]);
+						  }
+                    	  if(ideter[kko] == 1 && ideter[kok] == 2){
+                    	    xmat=xmat-(1.0/2.0)*(valxr[ii]*valxr[ii]);
+                    	    for(kkio=0;kkio<=7;kkio++){
+                    	      ideter2[kkio]=ideter[kkio];
+							}
+                    	    ideter2[kko]=2;
+                    	    ideter2[kok]=1;
+                    	    adr_(ideter2, &iaa2);
+							iaa2 = iaa2 - 1;
+                    	    xmat=xmat+valxr[ii]*valxr[iaa2];
+						  }
+                    	  if(ideter[kko] == 2 && ideter[kok] == 1){
+                    	    xmat=xmat-(1.0/2.0)*(valxr[ii]*valxr[ii]);
+                    	    for(kkio=0;kkio<=7;kkio++){
+                    	      ideter2[kkio]=ideter[kkio];
+							}
+                    	    ideter2[kko]=1;
+                    	    ideter2[kok]=2;
+                    	    adr_(ideter2, &iaa2);
+							iaa2 = iaa2 - 1;
+                    	    xmat=xmat+valxr[ii]*valxr[iaa2];
+						  }
+						}
+					}
+				}
+		      if(!i && mpiid == 1)printf("id = %d ii = %d  xmat = %18f xymat = %18f\n", mpiid, ii-Istart, xmat, xymat);
+				for(kko=0;kko<=3;kko++){
+                	for(kok=4;kok<=7;kok++){
+                    	if(kok == kko && ideter[kok] != 3){
+                    	  xmat=xmat+(3.0/4.0)*(valxr[ii]*valxr[ii]);
+						}
+						else{
+                    	  if(ideter[kko] == 1 && ideter[kok] == 1){
+                    	    xmat=xmat+(1.0/2.0)*(valxr[ii]*valxr[ii]);
+						  }
+                    	  if(ideter[kko] == 2 && ideter[kok] == 2){
+                    	    xmat=xmat+(1.0/2.0)*(valxr[ii]*valxr[ii]);
+						  }
+                    	  if(ideter[kko] == 1 && ideter[kok] == 2){
+                    	    xmat=xmat-(1.0/2.0)*(valxr[ii]*valxr[ii]);
+                    	    for(kkio=0;kkio<=7;kkio++){
+                    	      ideter2[kkio]=ideter[kkio];
+							}
+                    	    ideter2[kko]=2;
+                    	    ideter2[kok]=1;
+                    	    adr_(ideter2, &iaa2);
+							iaa2 = iaa2 - 1;
+							if(!(i) && mpiid == 1)printf("iaa2 = %d\n",iaa2);
+                    	    xmat=xmat+valxr[ii]*valxr[iaa2];
+						  }
+                    	  if(ideter[kko] == 2 && ideter[kok] == 1){
+                    	    xmat=xmat-(1.0/2.0)*(valxr[ii]*valxr[ii]);
+                    	    for(kkio=0;kkio<=7;kkio++){
+                    	      ideter2[kkio]=ideter[kkio];
+							}
+                    	    ideter2[kko]=1;
+                    	    ideter2[kok]=2;
+                    	    adr_(ideter2, &iaa2);
+							iaa2 = iaa2 - 1;
+							if(!(i) && mpiid == 1)printf("2 iaa2 = %d\n",iaa2);
+                    	    xmat=xmat+valxr[ii]*valxr[iaa2];
+						  }
+						}
+					  }
+					}
   
 //---------------------------------------
+		      if(!i && mpiid == 1)printf("id = %d ii = %d  xmat = %18f xymat = %18f\n", mpiid, ii-Istart, xmat, xymat);
               xymat=xymat+xmat;
 	  }
   }
@@ -374,7 +389,7 @@ int main(int argc,char **argv)
   	XS=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin/normfin)));
   }
 
-  printf("\n mpiid = %d  # root = %d norm = %18f xymat =  %18f S^2 = %18f \n", mpiid, i, norm, xymat, XS);
+//printf("\n mpiid = %d  # root = %d norm = %18f xymat =  %18f S^2 = %18f \n", mpiid, i, norm, xymat, XS);
   PetscPrintf(PETSC_COMM_WORLD,"\n norm = %18f xymat =  %18f S^2 = %18f \n", normfin, xymatfin, XS);
   xymatfin = 0.0;
   normfin = 0.0;
