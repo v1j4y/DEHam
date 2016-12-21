@@ -29,6 +29,7 @@ int main(int argc,char **argv)
   int			 ideter[natomax];
   int			 ideter2[natomax];
   PetscScalar    densmat[4][4]={0.0};
+  PetscScalar    densmatfin[4][4]={0.0};
   PetscScalar    trace;
 
   char const* const fileName = argv[1];
@@ -57,6 +58,11 @@ int main(int argc,char **argv)
   PetscReal      xymatfin=0.0;
   PetscReal      XS = 0.0;
   int 		   	 kko,kok,kkio;
+  Vec 			 xiaa2; /* initial vector, destination vector */
+  VecScatter 	 scatter; /* scatter context */
+  IS 		     from, to; /* index sets that define the scatter */
+  PetscScalar 	 *values;
+  int 	         idx_from[] = {0}, idx_to[] = {0};
 
   SlepcInitialize(&argc,&argv,(char*)0,NULL);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"\n1-D t-J Eigenproblem, n=%D\n\n",getdata.n);CHKERRQ(ierr);
@@ -353,10 +359,11 @@ int main(int argc,char **argv)
    * Calculating the one-particle density matrix
    */
 
+                 for(ii=Istart;ii<=Iend;ii+=1){
+
              for(kko=0;kko<=3;kko++){
                for(kok=0;kok<=3;kok++){
  
-                 for(ii=Istart;ii<=Iend;ii+=1){
 
 		  		   iii = ii+1;
                    getdet_(&iii,ideter);
@@ -369,21 +376,23 @@ int main(int argc,char **argv)
                        ideter2[kko]=3;
                        adr_(ideter2, &iaa2);
 					   iaa2 = iaa2 - 1;
-					   Vec xiaa2; /* initial vector, destination vector */
-					   VecScatter scatter; /* scatter context */
-					   IS from, to; /* index sets that define the scatter */
-					   PetscScalar *values;
-					   int idx_from[] = {iaa2}, idx_to[] = {0};
+
+					   /* get value from other processor */
+
+					   idx_from[0] = iaa2;
+  					   IS 		     from, to; /* index sets that define the scatter */
 					   VecCreateSeq(PETSC_COMM_SELF,1,&xiaa2);
 					   ISCreateGeneral(PETSC_COMM_SELF,1,idx_from,PETSC_COPY_VALUES,&from);
 					   ISCreateGeneral(PETSC_COMM_SELF,1,idx_to,  PETSC_COPY_VALUES,&to);
 					   VecScatterCreate(xr,from,xiaa2,to,&scatter);
 					   VecScatterBegin(scatter,xr,xiaa2,INSERT_VALUES,SCATTER_FORWARD);
-					   VecScatterEnd(scatter,xr,xiaa2,  INSERT_VALUES,SCATTER_FORWARD);
+					   VecScatterEnd  (scatter,xr,xiaa2,INSERT_VALUES,SCATTER_FORWARD);
 					   VecGetArray(xiaa2,&values);
 					   ISDestroy(&from);
 					   ISDestroy(&to);
 					   VecScatterDestroy(&scatter);
+					   /* value stored in values */
+
                        densmat[kko][kok]=densmat[kko][kok]+valxr[ii]*values[0];
 					   if(1)printf("id = %d iaa2 = %d valxr = %18f\n", mpiid, iaa2, values[0]);
                      }
@@ -392,19 +401,23 @@ int main(int argc,char **argv)
                      densmat[kko][kko]=densmat[kko][kko]+valxr[ii]*valxr[ii];
                    }
 
-				 }
-
 			   }
 			 }
 
+				   printf("mpiid = %d ii = %d kko = %d kok = %d\n", mpiid, ii, kko, kok);
+				 }
+
+			 printf("done----done");
 			 trace = 0.0;
+  			 MPI_Reduce(densmat, densmatfin, 16, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
 			 if(!mpiid){
 				 for(kko=0;kko<=3;kko++){
-					 trace = trace + densmat[kko][kko];
+					 trace = trace + densmatfin[kko][kko];
 				 }
 				 for(kko=0;kko<=3;kko++){
 				   for(kok=0;kok<=3;kok++){
 					 densmat[kko][kok]=0.0;
+					 densmatfin[kko][kok]=0.0;
 				   }
 				 }
 			 }
