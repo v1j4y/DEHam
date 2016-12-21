@@ -13,7 +13,7 @@ int main(int argc,char **argv)
   EPS            eps;         /* eigenproblem solver context */
   EPSType        type;
   PetscReal      error,tol,re,im;
-  PetscReal      norm;
+  PetscReal      norm=0.0;
   PetscScalar    kr,ki,value[700];
   Vec            xr,xi;
   PetscInt       i,Istart,Iend,col[700],maxit,its,nconv,countcol;
@@ -24,8 +24,9 @@ int main(int argc,char **argv)
 //PetscScalar    eigr;
 //PetscScalar    eigi;
   int            mpiid;
-  int            natomax=700;
+  int            natomax=700, iaa2, iaa;
   int			 ideter[natomax];
+  int			 ideter2[natomax];
 
   char const* const fileName = argv[1];
   FILE* file = fopen(fileName, "r");
@@ -48,6 +49,9 @@ int main(int argc,char **argv)
   long int		 ii;
   long int       tcountcol2,tcol[700],tcountcol[getdata.nnz];
   double         val[700];
+  PetscReal      xmat=0.0;
+  PetscReal      xymat=0.0;
+  PetscInt 		 kko,kok,kkio;
 
   SlepcInitialize(&argc,&argv,(char*)0,NULL);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"\n1-D t-J Eigenproblem, n=%D\n\n",getdata.n);CHKERRQ(ierr);
@@ -151,7 +155,7 @@ int main(int argc,char **argv)
   ierr = EPSGetType(eps,&type);CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD," Solution method: %s\n\n",type);CHKERRQ(ierr);
   ierr = EPSGetDimensions(eps,&nev,NULL,NULL);CHKERRQ(ierr);
-  ierr = PetscPrintf(PETSC_COMM_WORLD," Number of requested eigenvalues: %D\n",nev);CHKERRQ(ierr);
+  ierr = PetscPrintf(PETSC_COMM_WORLD," Number of  == ested eigenvalues: %D\n",nev);CHKERRQ(ierr);
   ierr = EPSGetTolerances(eps,&tol,&maxit);CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD," Stopping condition: tol=%.4g, maxit=%D\n",(double)tol,maxit);CHKERRQ(ierr);
 
@@ -160,7 +164,7 @@ int main(int argc,char **argv)
 
   if (nconv>0) {
     /*
-       Display eigenvalues and relative errors
+       Display eigenvalues && relative errors
     */
     ierr = PetscPrintf(PETSC_COMM_WORLD,
          "           k          ||Ax-kx||/||kx||\n"
@@ -194,7 +198,7 @@ int main(int argc,char **argv)
   }
 
   /*
-     Save eigenvectors, if requested
+     Save eigenvectors, if  == ested
   */
 //PetscOptionsGetString(NULL,NULL,"-evecs",filename,PETSC_MAX_PATH_LEN,&evecs);
   EPSGetConverged(eps,&nconv);
@@ -231,17 +235,64 @@ int main(int argc,char **argv)
 		  indxr[i-Istart] = i;
 	  }
 	  ierr = VecGetValues(xr, nlocal, indxr, valxr);CHKERRQ(ierr);
+	  printf("istart = %d, iend = %d\n",Istart, Iend);
   	  for (ii=Istart; ii<Iend; ii+=1) {
 //  PetscPrintf(PETSC_COMM_WORLD," Element # = %d Value = %18f \n", i, valxr[i-Istart]); 
-		  printf("\n Element # = %ld Value = %18f \n", ii, valxr[ii-Istart]); 
 		  iii = ii+1;
+		  xmat = 0.0;
 		  getdet_(&iii, ideter);
-		  for(kk=0; kk<8; kk++){
-			  printf("%d ", ideter[kk]);
-		  }
+//	  for(kk=0; kk<8; kk++){
+//		  printf("%d ", ideter[kk]);
+//	  }
+              if(1){
+                norm=norm+valxr[ii-Istart]*valxr[ii-Istart];
+				for(kko=1;kko<=8;kko++){
+                	for(kok=kko;kko<=8;kok++){
+                    	if(kok == kko && ideter[kok] != 3){
+                    	  xmat=xmat+(3.0/4.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+						}
+						else{
+                    	  if(ideter[kko] == 1 && ideter[kok] == 1){
+                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+						  }
+                    	  if(ideter[kko] == 2 && ideter[kok] == 2){
+                    	    xmat=xmat+(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+						  }
+                    	  if(ideter[kko] == 1 && ideter[kok] == 2){
+                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+                    	    for(kkio=1;kkio<=8;kkio++){
+                    	      ideter2[kkio]=ideter[kkio];
+							}
+                    	    ideter2[kko]=2;
+                    	    ideter2[kok]=1;
+                    	    adr_(ideter2, &iaa2);
+							printf("first iaa2 = %d\n",iaa2);
+							iaa2 = iaa2 - 1;
+                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
+						  }
+                    	  if(ideter[kko] == 2 && ideter[kok] == 1){
+                    	    xmat=xmat-(1.0/2.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
+                    	    for(kkio=1;kkio<=8;kkio++){
+                    	      ideter2[kkio]=ideter[kkio];
+							}
+                    	    ideter2[kko]=1;
+                    	    ideter2[kok]=2;
+                    	    adr_(ideter2, &iaa2);
+							printf("second iaa2 = %d\n",iaa2);
+							iaa2 = iaa2 - 1;
+                    	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
+						  }
+						}
+					}
+				}
+  
+//---------------------------------------
+              xymat=xymat+xmat;
 	  }
 
     ierr = PetscPrintf(PETSC_COMM_WORLD,"\n");CHKERRQ(ierr);
+  }
+  printf("\n xymat =  %18f \n", xymat); 
   }
 
   ierr = EPSDestroy(&eps);CHKERRQ(ierr);
