@@ -165,41 +165,6 @@ int main(int argc,char **argv)
   ierr = EPSGetConverged(eps,&nconv);CHKERRQ(ierr);
 //ierr = EPSPrintSolution(eps,NULL);CHKERRQ(ierr);
 
-  if (nconv>0) {
-    /*
-       Display eigenvalues && relative errors
-    */
-    ierr = PetscPrintf(PETSC_COMM_WORLD,
-         "           k          ||Ax-kx||/||kx||\n"
-         "   ----------------- ------------------\n");CHKERRQ(ierr);
-
-    for (i=0;i<nev;i++) {
-      /*
-        Get converged eigenpairs: i-th eigenvalue is stored in kr (real part) and
-        ki (imaginary part)
-      */
-      ierr = EPSGetEigenpair(eps,i,&kr,&ki,xr,xi);CHKERRQ(ierr);
-      /*
-         Compute the relative error associated to each eigenpair
-      */
-      ierr = EPSComputeError(eps,i,EPS_ERROR_RELATIVE,&error);CHKERRQ(ierr);
-
-#if defined(PETSC_USE_COMPLEX)
-      re = PetscRealPart(kr);
-      im = PetscImaginaryPart(kr);
-#else
-      re = kr;
-      im = ki;
-#endif
-      if (im!=0.0) {
-        ierr = PetscPrintf(PETSC_COMM_WORLD," %14f%+14fi %12g\n",(double)re,(double)im,(double)error);CHKERRQ(ierr);
-      } else {
-        ierr = PetscPrintf(PETSC_COMM_WORLD,"   %18f       %12g\n",(double)re,(double)error);CHKERRQ(ierr);
-      }
-    }
-    ierr = PetscPrintf(PETSC_COMM_WORLD,"\n");CHKERRQ(ierr);
-  }
-
   /*
      Save eigenvectors, if  == ested
   */
@@ -225,6 +190,10 @@ int main(int argc,char **argv)
    */
 
   if (nconv>0) {
+
+    ierr = PetscPrintf(PETSC_COMM_WORLD,
+         "           k          ||Ax-kx||/||kx||        <S^2>\n"
+         "   ----------------- ----------------- ------------------\n");CHKERRQ(ierr);
 
    for(i=0;i<nev;i++){
 
@@ -374,11 +343,31 @@ int main(int argc,char **argv)
   }
 
 //printf("\n mpiid = %d  # root = %d norm = %18f xymat =  %18f S^2 = %18f \n", mpiid, i, norm, xymat, XS);
-  PetscPrintf(PETSC_COMM_WORLD,"\n norm = %18f xymat =  %18f S^2 = %18f \n", normfin, xymatfin, XS);
+//PetscPrintf(PETSC_COMM_WORLD,"\n norm = %18f xymat =  %18f S^2 = %18f \n", normfin, xymatfin, XS);
   xymatfin = 0.0;
   normfin = 0.0;
+
+      /*
+         Compute the relative error associated to each eigenpair
+      */
+      ierr = EPSComputeError(eps,i,EPS_ERROR_RELATIVE,&error);CHKERRQ(ierr);
+
+#if defined(PETSC_USE_COMPLEX)
+      re = PetscRealPart(kr);
+      im = PetscImaginaryPart(kr);
+#else
+      re = kr;
+      im = ki;
+#endif
+      if (im!=0.0) {
+        ierr = PetscPrintf(PETSC_COMM_WORLD," %14f%+14fi %12g\n",(double)re,(double)im,(double)error);CHKERRQ(ierr);
+      } else {
+        ierr = PetscPrintf(PETSC_COMM_WORLD,"   %18f     %12g %18f\n",(double)re,(double)error,(double)XS);CHKERRQ(ierr);
+      }
+    }
+    ierr = PetscPrintf(PETSC_COMM_WORLD,"\n");CHKERRQ(ierr);
   }
-  }
+
 
   ierr = EPSDestroy(&eps);CHKERRQ(ierr);
   ierr = MatDestroy(&A);CHKERRQ(ierr);
