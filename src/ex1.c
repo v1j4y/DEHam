@@ -28,6 +28,8 @@ int main(int argc,char **argv)
   int            natomax=700, iaa2, iaa;
   int			 ideter[natomax];
   int			 ideter2[natomax];
+  PetscScalar    densmat[4][4]={0.0};
+  PetscScalar    trace;
 
   char const* const fileName = argv[1];
   FILE* file = fopen(fileName, "r");
@@ -347,6 +349,67 @@ int main(int argc,char **argv)
   xymatfin = 0.0;
   normfin = 0.0;
 
+  /*
+   * Calculating the one-particle density matrix
+   */
+
+             for(kko=0;kko<=3;kko++){
+               for(kok=0;kok<=3;kok++){
+ 
+                 for(ii=Istart;ii<=Iend;ii+=1){
+
+		  		   iii = ii+1;
+                   getdet_(&iii,ideter);
+                   for(kkio=0;kkio<=7;kkio++){
+                     ideter2[kkio]=ideter[kkio];
+				   }
+                   if(ideter[kko] != 3){
+                     if(ideter[kok] == 3){
+                       ideter2[kok]=ideter[kko];
+                       ideter2[kko]=3;
+                       adr_(ideter2, &iaa2);
+					   iaa2 = iaa2 - 1;
+					   Vec xiaa2; /* initial vector, destination vector */
+					   VecScatter scatter; /* scatter context */
+					   IS from, to; /* index sets that define the scatter */
+					   PetscScalar *values;
+					   int idx_from[] = {iaa2}, idx_to[] = {0};
+					   VecCreateSeq(PETSC_COMM_SELF,1,&xiaa2);
+					   ISCreateGeneral(PETSC_COMM_SELF,1,idx_from,PETSC_COPY_VALUES,&from);
+					   ISCreateGeneral(PETSC_COMM_SELF,1,idx_to,  PETSC_COPY_VALUES,&to);
+					   VecScatterCreate(xr,from,xiaa2,to,&scatter);
+					   VecScatterBegin(scatter,xr,xiaa2,INSERT_VALUES,SCATTER_FORWARD);
+					   VecScatterEnd(scatter,xr,xiaa2,  INSERT_VALUES,SCATTER_FORWARD);
+					   VecGetArray(xiaa2,&values);
+					   ISDestroy(&from);
+					   ISDestroy(&to);
+					   VecScatterDestroy(&scatter);
+                       densmat[kko][kok]=densmat[kko][kok]+valxr[ii]*values[0];
+					   if(1)printf("id = %d iaa2 = %d valxr = %18f\n", mpiid, iaa2, values[0]);
+                     }
+                   }
+                   if(kko == kok && ideter[kko] != 3){
+                     densmat[kko][kko]=densmat[kko][kko]+valxr[ii]*valxr[ii];
+                   }
+
+				 }
+
+			   }
+			 }
+
+			 trace = 0.0;
+			 if(!mpiid){
+				 for(kko=0;kko<=3;kko++){
+					 trace = trace + densmat[kko][kko];
+				 }
+				 for(kko=0;kko<=3;kko++){
+				   for(kok=0;kok<=3;kok++){
+					 densmat[kko][kok]=0.0;
+				   }
+				 }
+			 }
+
+
       /*
          Compute the relative error associated to each eigenpair
       */
@@ -362,7 +425,7 @@ int main(int argc,char **argv)
       if (im!=0.0) {
         ierr = PetscPrintf(PETSC_COMM_WORLD," %14f%+14fi %12g\n",(double)re,(double)im,(double)error);CHKERRQ(ierr);
       } else {
-        ierr = PetscPrintf(PETSC_COMM_WORLD,"   %18f     %12g %18f\n",(double)re,(double)error,(double)XS);CHKERRQ(ierr);
+        ierr = PetscPrintf(PETSC_COMM_WORLD,"   %18f     %12g %18f   %18f\n",(double)re,(double)error,(double)XS,(double)trace);CHKERRQ(ierr);
       }
     }
     ierr = PetscPrintf(PETSC_COMM_WORLD,"\n");CHKERRQ(ierr);
