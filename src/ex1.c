@@ -14,6 +14,7 @@ int main(int argc,char **argv)
   EPSType        type;
   PetscReal      error,tol,re,im;
   PetscReal      norm=0.0;
+  PetscReal      normfin=0.0;
   PetscScalar    kr,ki,value[700];
   Vec            xr,xi;
   PetscInt       i,Istart,Iend,col[700],maxit,its,nconv,countcol;
@@ -49,9 +50,11 @@ int main(int argc,char **argv)
   long int		 ii;
   long int       tcountcol2,tcol[700],tcountcol[getdata.nnz];
   double         val[700];
-  PetscReal      xmat=0.0;
+  double         xmat=0.0;
   PetscReal      xymat=0.0;
-  PetscInt 		 kko,kok,kkio;
+  PetscReal      xymatfin=0.0;
+  PetscReal      XS = 0.0;
+  int 		   	 kko,kok,kkio;
 
   SlepcInitialize(&argc,&argv,(char*)0,NULL);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"\n1-D t-J Eigenproblem, n=%D\n\n",getdata.n);CHKERRQ(ierr);
@@ -231,11 +234,11 @@ int main(int argc,char **argv)
 
 	  ierr = VecNorm(xr, NORM_2, &norm);CHKERRQ(ierr);
 	  PetscPrintf(PETSC_COMM_WORLD," Norm = %18f \n", (double)norm);
+	  norm = 0.0;
   	  for (i=Istart; i<Iend; i+=1) {
 		  indxr[i-Istart] = i;
 	  }
 	  ierr = VecGetValues(xr, nlocal, indxr, valxr);CHKERRQ(ierr);
-	  printf("istart = %d, iend = %d\n",Istart, Iend);
   	  for (ii=Istart; ii<Iend; ii+=1) {
 //  PetscPrintf(PETSC_COMM_WORLD," Element # = %d Value = %18f \n", i, valxr[i-Istart]); 
 		  iii = ii+1;
@@ -246,8 +249,8 @@ int main(int argc,char **argv)
 //	  }
               if(1){
                 norm=norm+valxr[ii-Istart]*valxr[ii-Istart];
-				for(kko=1;kko<=8;kko++){
-                	for(kok=kko;kko<=8;kok++){
+				for(kko=0;kko<=7;kko++){
+                	for(kok=kko;kok<=7;kok++){
                     	if(kok == kko && ideter[kok] != 3){
                     	  xmat=xmat+(3.0/4.0)*(valxr[ii-Istart]*valxr[ii-Istart]);
 						}
@@ -266,7 +269,6 @@ int main(int argc,char **argv)
                     	    ideter2[kko]=2;
                     	    ideter2[kok]=1;
                     	    adr_(ideter2, &iaa2);
-							printf("first iaa2 = %d\n",iaa2);
 							iaa2 = iaa2 - 1;
                     	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
 						  }
@@ -278,7 +280,6 @@ int main(int argc,char **argv)
                     	    ideter2[kko]=1;
                     	    ideter2[kok]=2;
                     	    adr_(ideter2, &iaa2);
-							printf("second iaa2 = %d\n",iaa2);
 							iaa2 = iaa2 - 1;
                     	    xmat=xmat+valxr[ii-Istart]*valxr[iaa2];
 						  }
@@ -289,10 +290,13 @@ int main(int argc,char **argv)
 //---------------------------------------
               xymat=xymat+xmat;
 	  }
-
-    ierr = PetscPrintf(PETSC_COMM_WORLD,"\n");CHKERRQ(ierr);
   }
-  printf("\n xymat =  %18f \n", xymat); 
+  MPI_Reduce(&xymat, &xymatfin, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+  MPI_Reduce(&norm, &normfin, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+  if(!mpiid){
+  	XS=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin/normfin)));
+  }
+  PetscPrintf(PETSC_COMM_WORLD,"\n norm = %18f xymat =  %18f S^2 = %18f \n", normfin, xymatfin, XS);
   }
 
   ierr = EPSDestroy(&eps);CHKERRQ(ierr);
