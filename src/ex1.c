@@ -1,5 +1,6 @@
 #include <slepceps.h>
 #include <petsctime.h>
+#include <petscvec.h>
 #include "stimsyr.h"
 #include "read2.h"
 
