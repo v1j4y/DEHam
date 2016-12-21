@@ -221,7 +221,7 @@ int main(int argc,char **argv)
 	  ierr = VecNorm(xr, NORM_2, &norm);CHKERRQ(ierr);
 	  PetscPrintf(PETSC_COMM_WORLD," Norm = %18f \n", (double)norm);
   	  for (i=Istart; i<Iend; i+=getdata.nnz) {
-		  ierr = VecGetValue(xr, 1, i, value);
+		  ierr = VecGetValues(xr, 1, i, value);
 		  PetscPrintf(PETSC_COMM_WORLD," Element # = %d Value = %18f \n", i, value[0]); 
 	  }
 
