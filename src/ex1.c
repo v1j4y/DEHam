@@ -12,6 +12,7 @@ int main(int argc,char **argv)
   EPS            eps;         /* eigenproblem solver context */
   EPSType        type;
   PetscReal      error,tol,re,im;
+  PetscReal      norm;
   PetscScalar    kr,ki,value[700];
   Vec            xr,xi;
   PetscInt       i,Istart,Iend,col[700],maxit,its,nconv,countcol;
@@ -202,6 +203,26 @@ int main(int argc,char **argv)
 #endif
     }
     PetscViewerDestroy(&viewer);
+  }
+
+  /*
+   * now analyzing the eigenvector
+   */
+
+  if (nconv>0) {
+
+    for (i=0;i<nev;i++) {
+      /*
+        Get converged eigenpairs: i-th eigenvalue is stored in kr (real part) and
+        ki (imaginary part)
+      */
+      ierr = EPSGetEigenpair(eps,i,&kr,&ki,xr,xi);CHKERRQ(ierr);
+
+	  ierr = VecNorm(xr, NORM_2, &norm);CHKERRQ(ierr);
+	  PetscPrintf(PETSC_COMM_WORLD," Norm = %18f \n", (double)norm);
+
+    }
+    ierr = PetscPrintf(PETSC_COMM_WORLD,"\n");CHKERRQ(ierr);
   }
 
   ierr = EPSDestroy(&eps);CHKERRQ(ierr);
