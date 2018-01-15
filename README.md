@@ -22,6 +22,8 @@ Double Exchange Hamiltonian: Complete Version
 	```shell
 	export PETSC_DIR=${PATH_TO_PETSC_INSTALLATION}
 	export SLEPC_DIR=${PATH_TO_SLEPC_INSTALLATION}
+	export C_INCLUDE_PATH+=:$PETSC_DIR/include/:$SLEPC_DIR/include:$PETSC_DIR/arch-linux2-c-debug/include/:$SLEPC_DIR/arch-linux2-c-debug/include
+	# The "arch-linux2-c-debug" directory can have different names depending on PETSC and SLEPC installation procedure.
 	```
 
   2. Make the executable
