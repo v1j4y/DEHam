@@ -7,14 +7,14 @@ Double Exchange Hamiltonian: Complete Version
 
 (under GNU GENERAL PUBLIC LICENSE v2)
 
-1. Dependencies
+_Dependencies_
 ---------------
 
   1. [PETSc](https://www.mcs.anl.gov/petsc/documentation/installation.html) and [SLEPc](http://slepc.upv.es/documentation/current/docs/instal.htm)
 
   2. [IRPF90](https://github.com/scemama/irpf90)
 
-2. Compiling
+_Compiling_
 ------------
 
   1. Export environment variables for PETSc and SLEPc
@@ -31,7 +31,7 @@ export C_INCLUDE_PATH+=:$PETSC_DIR/include/:$SLEPC_DIR/include:$PETSC_DIR/arch-l
 make ex1
 ```
 
-3. Using DEHam
+_Using DEHam_
 ---------------
 
   1. The DEHam program requires an input file which 
@@ -58,7 +58,7 @@ make ex1
 mpiexec -n [nprocs] ./ex1 inpfile 
 ```
 
-4. Publications using this code
+_Publications using this code_
 -------------------------------
 
   1. High-Spin Chains and Crowns from Double-Exchange Mechanism [doi:10.3390/cryst6040039](http://www.dx.doi.org/10.3390/cryst6040039)
