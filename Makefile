@@ -24,7 +24,7 @@ ${BIN_DIR}:
 directories: ${OBJ_DIR} ${LIB_DIR} ${BIN_DIR}
 
 ${LIB_DIR}/irpf90.a: directories
-	cd ${SRC_DIR} && irpf90 init && $(MAKE) irpf90.a && cp irpf90.a ../${LIB_DIR}
+	cd ${SRC_DIR} && irpf90 init && $(MAKE) irpf90.a && cp IRPF90_temp/irpf90.a ../${LIB_DIR}
 
 ${OBJ_DIR}/read2.o: ${SRC_DIR}/read2.c directories chkopts
 	${CC} ${SLEPC_INCLUDE} ${PETSC_CC_INCLUDES} -c -o  $@ $< ${SLEPC_EPS_LIB} 
