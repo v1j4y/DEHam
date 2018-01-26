@@ -42,8 +42,8 @@ _Using DEHam_
 
 ```python
 140   # The total number of determinants (Ndet)
-7     # The largest number of non-zero elements per row (Multiple of Ndet)
-1     # The number of matrix elements to calculate at once (Multiple of Ndet)
+7     # The number of orbitals (total)
+1     # The largest number of non-zero elements per row (Multiple of Ndet)
 2     # The total number of processors used in parallel (Multiple of Ndet)
 1     # The number of holes
 0     # The isz (ms-1/2) value
