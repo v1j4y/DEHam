@@ -41,12 +41,12 @@ _Using DEHam_
    as explained below in a sample inputfile:
 
 ```python
-140					# The total number of determinants (Ndet)
-7					  # The largest number of non-zero elements per row (Multiple of Ndet)
-1           # The number of matrix elements to calculate at onece (Multiple of Ndet)
-2					  # The total number of processors used in parallel (Multiple of Ndet)
-1					  # The number of holes
-0					  # The isz (ms-1/2) value
+140   # The total number of determinants (Ndet)
+7     # The largest number of non-zero elements per row (Multiple of Ndet)
+1     # The number of matrix elements to calculate at once (Multiple of Ndet)
+2     # The total number of processors used in parallel (Multiple of Ndet)
+1     # The number of holes
+0     # The isz (ms-1/2) value
 1,2,3,1,2,3,4,5,6,7	# The topology of the system is specified here
 2,3,4,8,7,6,5,6,7,8	# first and second line contain the two sites linked
 1,1,1,2,2,2,2,3,3,3	# third line contains the type of link (1 for t, J 2 for K and 3 for none)
