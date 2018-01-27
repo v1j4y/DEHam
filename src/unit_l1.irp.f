@@ -9,9 +9,11 @@
         tcountcol,             &
         tntrou,                &
         tisz,                  &
+        tfam1,                 &
         tcol,tval)
         implicit none
         integer,INTENT(INOUT)::tistart, tnrows, tntrou, tisz
+        logical*1,INTENT(INOUT)::tfam1
         integer::i
         real*8,INTENT(INOUT)::tval(maxlien)
         integer(kind=selected_int_kind(16)),INTENT(INOUT)::tcol(maxlien)
@@ -31,6 +33,7 @@
         enddo
         ntrou = tntrou
         isz = tisz
+        FAM1 = tfam1
         tcol=0
         tval=0d0
         provide l1 l2 ktyp xtt xjjxy xjjz ntrou
@@ -38,6 +41,7 @@
 !print *,l1
 !print *,"xjjz"
 !print *,xjjz
+!print *,FAM1
         call unit(tistart, tcountcol,tcol,tval)
 
         end

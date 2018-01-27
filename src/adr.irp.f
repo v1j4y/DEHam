@@ -8,24 +8,24 @@ subroutine adr(ideter,add)
     END_DOC
     integer,INTENT(INOUT)::ideter(natomax)
     integer(kind=selected_int_kind(16)),INTENT(INOUT)::add
-    integer(kind=selected_int_kind(16))::det,deth,addh,detnew
+    integer(kind=selected_int_kind(16))::deti,dethi,addh,detnew
     integer::count,i,j
 
-    det=0
+    deti=0
     detnew=0
-    deth=0
+    dethi=0
     count=0
-    call conv(ideter,det,deth)
+    call conv(ideter,deti,dethi)
     Do i=0,natom-1
-        if(BTEST(deth,i))then
+        if(BTEST(dethi,i))then
             count=count+1
         endif
-        if(BTEST(det,i))then
+        if(BTEST(deti,i))then
             detnew=IBSET(detnew,i-count)
         endif
     enddo
-    det=detnew
-    call searchdet(det,add,deth,addh)
+    deti=detnew
+    call searchdet(deti,add,dethi,addh)
         add = add + (nt1-addh)*(nt2)
 
 

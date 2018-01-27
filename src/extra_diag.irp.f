@@ -99,7 +99,7 @@
             tistart=tistart+1
 
     enddo
-      Touch foundet foundetadr detfound foundadd foundaddh foundetdmat
+      Touch foundet foundetadr detfound foundadd foundaddh foundetdmat det deth
       call adrfull()
 
       do i=1,detfound

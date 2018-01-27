@@ -2,7 +2,6 @@ BEGIN_PROVIDER [integer, natom]
 &BEGIN_PROVIDER [integer, natrest]
 &BEGIN_PROVIDER [integer, ial0]
 &BEGIN_PROVIDER [logical*1, yham]
-&BEGIN_PROVIDER [logical*1, FAM1]
 &BEGIN_PROVIDER [integer, nlientot]
 &BEGIN_PROVIDER [real*8, xt,(maxlien)]
 &BEGIN_PROVIDER [real*8 , xjz,(maxlien)]
@@ -93,10 +92,11 @@ BEGIN_PROVIDER [integer, natom]
       enddo
 !------------------Lecture Hamiltonien
 
-       FAM1=.TRUE.
+!      FAM1=.TRUE. 
        yham=.TRUE.
        write(6,*)'HAMILTONIEN t-J'
        write(6,*)'Le nombre de trou est : ',ntrou
+       write(6,*)'Famille 1 : ',FAM1
 !---------------------------------------------
       write(6,*)' '
       write(6,*)' '
