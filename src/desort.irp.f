@@ -1,7 +1,8 @@
 subroutine desort()
+    use iso_c_binding
     implicit none
     integer::i,j,ord,ordh
-    integer(kind=selected_int_kind(16))::add,addh,deti,dethi,addt
+    integer(C_SIZE_T)::add,addh,deti,dethi,addt
 
     do i=1,detfound-1
         do j=i+1,detfound

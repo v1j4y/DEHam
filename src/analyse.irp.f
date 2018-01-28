@@ -1,10 +1,11 @@
       SUBROUTINE ANALYSE(vect, dimvect, startvect, endvect, xymat2, norm2)
 !     INCLUDE "nbtots.prm"
+      use iso_c_binding
       IMPLICIT NONE
       INTEGER   dimvect, nbtots, startvect, endvect
       REAL*8,dimension(dimvect)::vect
-      INTEGER (kind=selected_int_kind(16))::add,kvect
-      INTEGER (kind=selected_int_kind(16))::iaa2,i
+      INTEGER (C_SIZE_T)::add,kvect
+      INTEGER (C_SIZE_T)::iaa2,i
       INTEGER ,dimension(natomax)::ideter
       INTEGER ,dimension(natomax)::ideter2
       REAL*8,allocatable       ::xz(:)

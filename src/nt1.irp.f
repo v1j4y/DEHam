@@ -1,9 +1,10 @@
-BEGIN_PROVIDER [integer(kind=selected_int_kind(16)), nt1]
+use iso_c_binding
+BEGIN_PROVIDER [integer(C_SIZE_T), nt1]
     BEGIN_DOC
     ! calculates the number of det the 3's moving
     END_DOC
     implicit none
-    integer(kind=selected_int_kind(16))::natom2
+    integer(C_SIZE_T)::natom2
 
 !   call combin(idet1(1,nt1+1),natom,ntrou,nt1,32,jrangmax)
     natom2=natom

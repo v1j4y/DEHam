@@ -1,12 +1,13 @@
 subroutine getdet(add,ideter)
+    use iso_c_binding
     implicit none
     BEGIN_DOC
     ! this routing gives the determinant in
     ! the traditional form given its address
     END_DOC
     integer,INTENT(INOUT)::ideter(natomax)
-    integer(kind=selected_int_kind(16)),INTENT(IN)::add
-    integer(kind=selected_int_kind(16))::deta,detb
+    integer(C_SIZE_T),INTENT(IN)::add
+    integer(C_SIZE_T)::deta,detb
     integer::i,const,ia,ib, natom2
 
     ib = MOD(add,nt2)

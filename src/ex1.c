@@ -27,9 +27,10 @@ int main(int argc,char **argv)
   PetscReal      normfin2=0.0;
   PetscReal      normfin3=0.0;
   PetscReal      normfin4=0.0;
-  PetscScalar    kr,ki,value[700];
+  const int            natomax=900;
+  PetscScalar    kr,ki,value[natomax];
   Vec            xr,xi;
-  PetscInt       i,Istart,Iend,col[700],maxit,its,nconv,countcol;
+  PetscInt       i,Istart,Iend,col[natomax],maxit,its,nconv,countcol;
   PetscInt		 nev, ncv, mpd;
   PetscLogDouble t1,t2,tt1,tt2;
 //PetscBool      FirstBlock=PETSC_FALSE,LastBlock=PETSC_FALSE;
@@ -37,7 +38,6 @@ int main(int argc,char **argv)
 //PetscScalar    eigr;
 //PetscScalar    eigi;
   int            mpiid;
-  int            natomax=700;
 
   char const* const fileName = argv[1];
   FILE* file = fopen(fileName, "r");
@@ -60,8 +60,8 @@ int main(int argc,char **argv)
   PetscInt       kk,ll,mm,nn,iii2,iiii;
   PetscInt       ii;
   long int       iii;
-  long int       tcountcol2,tcol[700],tcountcol[getdata.nnz];
-  double         val[700];
+  long int       tcountcol2,tcol[natomax],tcountcol[getdata.nnz];
+  double         val[natomax];
   PetscReal      xymat=0.0;
   PetscReal      xymat2=0.0;
   PetscReal      xymat3=0.0;
@@ -96,8 +96,8 @@ int main(int argc,char **argv)
   SlepcInitialize(&argc,&argv,(char*)0,NULL);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"\n1-D t-J Eigenproblem, n=%D\n\n",getdata.n);CHKERRQ(ierr);
   ierr = MatCreate(PETSC_COMM_WORLD,&A);CHKERRQ(ierr);
-  ierr = MatCreateAIJ(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,getdata.n,getdata.n,2.0*getdata.natom,NULL,2.0*getdata.natom,NULL,&A);CHKERRQ(ierr);
-  ierr = MatMPIAIJSetPreallocation(A,getdata.natom,NULL,getdata.natom,NULL);CHKERRQ(ierr);
+  ierr = MatCreateAIJ(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,getdata.n,getdata.n,10*getdata.natom,NULL,10*getdata.natom,NULL,&A);CHKERRQ(ierr);
+  ierr = MatMPIAIJSetPreallocation(A,10*getdata.natom,NULL,10*getdata.natom,NULL);CHKERRQ(ierr);
 //ierr = MatSetFromOptions(A);CHKERRQ(ierr);
 //ierr = MatSetUp(A);CHKERRQ(ierr);
 
@@ -149,7 +149,7 @@ int main(int argc,char **argv)
             col[kk] = tcol[kk+tcountcol2]-1;
 //          PetscPrintf(PETSC_COMM_WORLD,"value = %f col = %d\n",value[kk],col[kk]);
         }
-        for(kk=tcountcol2+tcountcol[ll]+1;kk<700;kk++){
+        for(kk=tcountcol2+tcountcol[ll]+1;kk<natomax;kk++){
             value[kk] = 0.0;
             col[kk] = 0;
         }
@@ -268,13 +268,13 @@ int main(int argc,char **argv)
           get_s2(xr, &Istart, &Iend, values, &getdata.natom, &norm, &norm2, &norm3, &norm4, &xymat, &xymat2, &xymat3, &xymat4, &weight3,
                   &getdata.s21a1, &getdata.s21a2, &getdata.s21b1, &getdata.s21b2, &getdata.s22a1, &getdata.s22a2,
                   &getdata.s22b1, &getdata.s22b2,  &getdata.s23a1, &getdata.s23a2,
-                  &getdata.s23b1, &getdata.s23b2, &getdata.postrou);
+                  &getdata.s23b1, &getdata.s23b2, &getdata.postrou, natomax);
 //        get_s2_cyclic(xr, &Istart, &Iend, values, &getdata.natom, &norm, &norm2, &norm3, &norm4, &xymat, &xymat2, &xymat3, &xymat4,
 //                &getdata.s21a1, &getdata.s21a2, &getdata.s21b1, &getdata.s21b2, &getdata.s22a1, &getdata.s22a2,
 //                &getdata.s22b1, &getdata.s22b2,  &getdata.s23a1, &getdata.s23a2,
-//                &getdata.s23b1, &getdata.s23b2, &getdata.postrou);
-//        get_1rdm(values, &Istart, &Iend, &getdata.natom, &trace1rdm);
-//        get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, densmat2);
+//                &getdata.s23b1, &getdata.s23b2, &getdata.postrou, natomax);
+//        get_1rdm(values, &Istart, &Iend, &getdata.natom, &trace1rdm, natomax);
+//        get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, densmat2, natomax);
 //        analyse_(valxr, (Iend-Istart), &Istart, &Iend, &xymat, &norm);
           VecRestoreArray(vec2,&values);
           ierr = VecRestoreArray(xr, &valxr);CHKERRQ(ierr);

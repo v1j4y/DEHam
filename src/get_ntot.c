@@ -15,7 +15,8 @@ int get_ntot(_Bool FAM1, int natom, long int isz, long int ntrou, long int fix_t
       natom2 = natom;
   }
 
-  tnt1 =         (int)exp(lgamma((double)(natom2+1)) - (lgamma((double)(natom2-ntrou+1)) + lgamma((double)(ntrou+1))));
+  tnt1 =         (int)ceil(exp(lgamma((double)(natom2+1)) - (lgamma((double)(natom2-ntrou+1)) + lgamma((double)(ntrou+1)))));
+  printf("%10.5f | tnt1=%d\n",exp(lgamma((double)(natom2+1)) - (lgamma((double)(natom2-ntrou+1)) + lgamma((double)(ntrou+1)))),tnt1);
   int            nalpha, nbeta;
 
     if((((natom-ntrou) + 2*isz) % 2) == 0){
@@ -33,7 +34,7 @@ int get_ntot(_Bool FAM1, int natom, long int isz, long int ntrou, long int fix_t
         }
     }
 
-  tnt2 =         (int) exp(lgamma((double)(natom-ntrou+1)) - (lgamma((double)(nalpha+1)) + lgamma((double)(nbeta+1))));
-//printf("nalpha=%d nbeta=%d | | %d %d ntot=%d\n",nalpha, nbeta, tnt1, tnt2, tnt1*tnt2);
+  tnt2 =         (int)ceil(exp(lgamma((double)(natom-ntrou+1)) - (lgamma((double)(nalpha+1)) + lgamma((double)(nbeta+1)))));
+  printf("natom2=%d fix_trou1=%d fix_trou2=%d nalpha=%d nbeta=%d | | %d %d ntot=%d\n",natom2, fix_trou1, fix_trou2, nalpha, nbeta, tnt1, tnt2, tnt1*tnt2);
   return tnt1*tnt2;
 }

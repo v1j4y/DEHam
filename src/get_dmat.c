@@ -23,9 +23,8 @@
  * =====
  * trace    = trace
  */
-void get_1rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, PetscReal *trace1rdm){
+void get_1rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, PetscReal *trace1rdm, const int natomax){
 
-  const int            natomax=700;
   long int			 ideter[natomax];
   long int			 ideter2[natomax];
   int 		   	 kko,kok,kkio;
@@ -82,9 +81,8 @@ void get_1rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, 
  * =====
  * trace    = trace
  */
-void get_2rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, PetscReal *trace2rdm, double densmat2[*natom][*natom][*natom][*natom]){
+void get_2rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, PetscReal *trace2rdm, double densmat2[*natom][*natom][*natom][*natom], const int natomax){
 
-  const int            natomax=700;
   long int			 ideter[natomax];
   long int			 ideter2[natomax];
   int 		   	 kko,kok,kkio;

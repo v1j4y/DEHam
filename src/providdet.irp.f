@@ -1,12 +1,14 @@
-BEGIN_PROVIDER[integer(kind=selected_int_kind(16)),det,(nt2,2)]
-&BEGIN_PROVIDER[integer(kind=selected_int_kind(16)),deth,(nt1,2)]
+use iso_c_binding
+BEGIN_PROVIDER[integer(C_SIZE_T),det,(nt2,2)]
+&BEGIN_PROVIDER[integer(C_SIZE_T),deth,(nt1,2)]
     BEGIN_DOC
     ! provides det and deth array
     END_DOC
+    use iso_c_binding
     implicit none
 !   integer(kind=selected_int_kind(16))::dethsh
-    integer(kind=selected_int_kind(16))::a
-    integer(kind=selected_int_kind(16))::i,count
+    integer(C_SIZE_t)::a
+    integer(C_SIZE_T)::i,count
     integer::const
     i=1
     a=0

@@ -1,12 +1,13 @@
 subroutine conv(ideter,deti,dethi)
+    use iso_c_binding
     implicit none
     BEGIN_DOC
     ! this routine converts a detrminant in the old
     ! format into the new one and returns the determinant.
     END_DOC
     integer,INTENT(INOUT)::ideter(natomax)
-    integer(kind=selected_int_kind(16)),INTENT(INOUT)::deti
-    integer(kind=selected_int_kind(16)),INTENT(INOUT)::dethi
+    integer(C_SIZE_T),INTENT(INOUT)::deti
+    integer(C_SIZE_T),INTENT(INOUT)::dethi
     integer::i
     deti=0
     dethi=0

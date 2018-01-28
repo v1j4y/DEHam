@@ -1,4 +1,5 @@
 subroutine adr(ideter,add)
+    use iso_c_binding
     implicit none
     BEGIN_DOC
     ! this subroutine provides the address of a detrminant 
@@ -7,8 +8,8 @@ subroutine adr(ideter,add)
     ! matches the given determinant.
     END_DOC
     integer,INTENT(INOUT)::ideter(natomax)
-    integer(kind=selected_int_kind(16)),INTENT(INOUT)::add
-    integer(kind=selected_int_kind(16))::deti,dethi,addh,detnew
+    integer(C_SIZE_T),INTENT(INOUT)::add
+    integer(C_SIZE_T)::deti,dethi,addh,detnew
     integer::count,i,j
 
     deti=0

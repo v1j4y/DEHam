@@ -13,6 +13,7 @@
         tfix_trou2,            &
         tfam1,                 &
         tcol,tval)
+        use iso_c_binding
         implicit none
         integer,INTENT(INOUT)::tistart, tnrows
         integer,INTENT(INOUT)::tntrou, tisz
@@ -20,9 +21,9 @@
         logical*1,INTENT(INOUT)::tfam1
         integer::i
         real*8,INTENT(INOUT)::tval(maxlien)
-        integer(kind=selected_int_kind(16)),INTENT(INOUT)::tcol(maxlien)
-        integer(kind=selected_int_kind(16)),INTENT(INOUT),dimension(tnrows)::tcountcol
-        integer(kind=selected_int_kind(16)),INTENT(INOUT)::tl1(maxlien),tl2(maxlien),tktyp(maxlien)
+        integer(C_SIZE_T),INTENT(INOUT)::tcol(maxlien)
+        integer(C_SIZE_T),INTENT(INOUT),dimension(tnrows)::tcountcol
+        integer(C_SIZE_T),INTENT(INOUT)::tl1(maxlien),tl2(maxlien),tktyp(maxlien)
         real*8,INTENT(INOUT)::txtt(maxlien),txjjz(maxlien),txjjxy(maxlien)
    
 		nrows = tnrows

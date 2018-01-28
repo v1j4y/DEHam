@@ -1,13 +1,14 @@
         program main
+        use iso_c_binding
         implicit none
-        integer(kind=selected_int_kind(16)),allocatable::tl1(:),tl2(:),tktyp(:)
+        integer(C_SIZE_T),allocatable::tl1(:),tl2(:),tktyp(:)
         real*8,allocatable::txtt(:),txjjxy(:),txjjz(:)
         integer::i, tnrows, tntrou,tisz
         real*4::t1,t2
         real*8,allocatable::tval(:)
-        integer(kind=selected_int_kind(16)),allocatable::tcol(:)
-        integer(kind=selected_int_kind(16)),dimension(10)::tcountcol
-        integer(kind=selected_int_kind(16))::tistart
+        integer(C_SIZE_T),allocatable::tcol(:)
+        integer(C_SIZE_T),dimension(10)::tcountcol
+        integer(C_SIZE_T)::tistart
         allocate (tl1(maxlien))
         allocate (tl2(maxlien))
         allocate (tktyp(maxlien))

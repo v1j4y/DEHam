@@ -1,5 +1,6 @@
 subroutine adrfull()
     implicit none
+    use iso_c_binding
     BEGIN_DOC
     ! this subroutine provides the address of a detrminant 
     ! given in old format.
@@ -7,8 +8,8 @@ subroutine adrfull()
     ! matches the given determinant.
     END_DOC
     integer,dimension(natomax)::ideter
-    integer(kind=selected_int_kind(16))::add
-    integer(kind=selected_int_kind(16))::deti,dethi,addh,detnew
+    integer(C_SIZE_T)::add
+    integer(C_SIZE_T)::deti,dethi,addh,detnew
     integer::count,i,j
 
     deti=0

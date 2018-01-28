@@ -1,8 +1,9 @@
         subroutine extra_diag(tistart)
+        use iso_c_binding
         implicit none
 
-        integer(kind=selected_int_kind(16)) :: iaa,iaa2,tistart,tistart2
-        integer(kind=selected_int_kind(16)) :: imat4,jmat4
+        integer(C_SIZE_T) :: iaa,iaa2,tistart,tistart2
+        integer(C_SIZE_T) :: imat4,jmat4
         integer :: i,ik,iik,j
         integer :: ik1,ik2,IC,k,ikmax,ikmin,count,count2,detfound2
         integer,allocatable :: ideter2(:)
