@@ -22,7 +22,14 @@ subroutine getdet(add,ideter)
     i=1
     detb = det(ib,1)
     deta = deth(ia,1)
-    if(FAM1) deta = ISHFT(deta,-(natom/2))
+    if(FAM1) then
+        if(fix_trou1 .eq. fix_trou2) then
+            deta = ISHFT(deta,-(natom/2))
+        else
+            natom2 = natom - (fix_trou2 - fix_trou1)
+            deta = ISHFT(deta, -natom2)
+        endif
+    endif
 !    do while (i.le.(ib))
 !        const=1
 !        do while(popcnt(detb).ne.nbeta .or. const==1)
@@ -44,7 +51,11 @@ subroutine getdet(add,ideter)
 !    enddo
     const=0
     if(FAM1) then
-        natom2 = natom/2
+        if(fix_trou1 .eq. fix_trou2) then
+            natom2 = natom/2
+        else
+            natom2 = (fix_trou2 - fix_trou1)
+        endif
     else
         natom2 = natom
     endif

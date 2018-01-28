@@ -31,7 +31,11 @@ BEGIN_PROVIDER[integer(kind=selected_int_kind(16)),det,(nt2,2)]
                 enddo
                 count+=1
                 if(FAM1) then
-                    deth(count,1)=ISHFT(a,natom/2)
+                    if(fix_trou1 .eq. fix_trou2) then
+                        deth(count,1)=ISHFT(a,natom/2)
+                    else
+                        deth(count,1)=ISHFT(a,natom - (fix_trou2-fix_trou1))
+                    endif
                 else 
                     deth(count, 1) = a
                 endif

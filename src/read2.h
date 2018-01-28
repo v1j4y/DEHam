@@ -6,13 +6,13 @@
 #include <petscsys.h>
 #include <slepceps.h>
 
-PetscBool to_bool(const char* str);
+_Bool to_bool(const char* str);
 
 typedef struct {
 	PetscInt n;
 	long int nnz,npar;
 	long int ntrou,isz;
-        PetscBool FAM1;
+        _Bool FAM1;
 	long int l1[700];
 	long int l2[700];
 	long int ktyp[700];
@@ -33,7 +33,9 @@ typedef struct {
 	int s23a2;
 	int s23b1;
 	int s23b2;
-	int postrou;
+	long int postrou;
+	long int fix_trou1;
+	long int fix_trou2;
 
 } Data ;
 

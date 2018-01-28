@@ -97,6 +97,9 @@ BEGIN_PROVIDER [integer, natom]
        write(6,*)'HAMILTONIEN t-J'
        write(6,*)'Le nombre de trou est : ',ntrou
        write(6,*)'Famille 1 : ',FAM1
+       if(FAM1) then
+        if(fix_trou1 .ne. fix_trou2) write(6,*)'Trou fixe entre :', fix_trou1, "et ", fix_trou2
+       endif
 !---------------------------------------------
       write(6,*)' '
       write(6,*)' '

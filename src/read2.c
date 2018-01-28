@@ -13,7 +13,7 @@ void Data_new(FILE* file, Data* dat) {
 	
 	    /* note that fgets don't strip the terminating \n, checking its
 	       presence would allow to handle lines longer that sizeof(line) */
-	  if (count != 26){
+	  if (count != 29){
 			count++;
 			switch(count){
 				case 1:
@@ -223,6 +223,12 @@ void Data_new(FILE* file, Data* dat) {
                                 case 27:
 					dat->postrou=atol(line);
 					break;
+                                case 28:
+					dat->fix_trou1=atol(line);
+					break;
+                                case 29:
+					dat->fix_trou2=atol(line);
+					break;
 		} /* end of switch */
 
 	  } /* end of the input file */
@@ -232,7 +238,7 @@ void Data_new(FILE* file, Data* dat) {
 //return dat;
 }
 
-PetscBool to_bool(const char* str) {
+_Bool to_bool(const char* str) {
     PetscBool strflg;
     PetscStrcmp("true\n",str, &strflg);
     if(!strflg) PetscStrcmp("True\n",str, &strflg);

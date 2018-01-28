@@ -9,10 +9,14 @@
         tcountcol,             &
         tntrou,                &
         tisz,                  &
+        tfix_trou1,            &
+        tfix_trou2,            &
         tfam1,                 &
         tcol,tval)
         implicit none
-        integer,INTENT(INOUT)::tistart, tnrows, tntrou, tisz
+        integer,INTENT(INOUT)::tistart, tnrows
+        integer,INTENT(INOUT)::tntrou, tisz
+        integer,INTENT(INOUT)::tfix_trou1, tfix_trou2
         logical*1,INTENT(INOUT)::tfam1
         integer::i
         real*8,INTENT(INOUT)::tval(maxlien)
@@ -34,6 +38,8 @@
         ntrou = tntrou
         isz = tisz
         FAM1 = tfam1
+        fix_trou1 = tfix_trou1
+        fix_trou2 = tfix_trou2
         tcol=0
         tval=0d0
         provide l1 l2 ktyp xtt xjjxy xjjz ntrou
