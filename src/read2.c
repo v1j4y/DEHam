@@ -13,31 +13,28 @@ void Data_new(FILE* file, Data* dat) {
 	
 	    /* note that fgets don't strip the terminating \n, checking its
 	       presence would allow to handle lines longer that sizeof(line) */
-	  if (count != 29){
+	  if (count != 28){
 			count++;
 			switch(count){
 				case 1:
-					dat->n=atol(line);
-					break;
-				case 2:
 					dat->natom=atol(line);
 					break;
-				case 3:
+				case 2:
 					dat->nnz=atol(line);
 					break;
-				case 4:
+				case 3:
 					dat->npar=atol(line);
 					break;
-				case 5:
+				case 4:
 					dat->ntrou=atol(line);
 					break;
-				case 6:
+				case 5:
 					dat->isz=atol(line);
 					break;
-				case 7:
+				case 6:
 					dat->FAM1 = to_bool(line);
 					break;
-				case 8:
+				case 7:
 					arrayIdx=0;
 					for (token = strtok(line, delim); token != NULL; token = strtok(NULL, delim))
 					{
@@ -61,7 +58,7 @@ void Data_new(FILE* file, Data* dat) {
 					  }
 					}
 					break;
-				case 9:
+				case 8:
 					arrayIdx=0;
 					for (token = strtok(line, delim); token != NULL; token = strtok(NULL, delim))
 					{
@@ -85,7 +82,7 @@ void Data_new(FILE* file, Data* dat) {
 					  }
 					}
 					break;
-				case 10:
+				case 9:
 					arrayIdx=0;
 					for (token = strtok(line, delim); token != NULL; token = strtok(NULL, delim))
 					{
@@ -109,7 +106,7 @@ void Data_new(FILE* file, Data* dat) {
 					  }
 					}
 					break;
-				case 11:
+				case 10:
 					arrayIdx=0;
 					for (token = strtok(line, delim); token != NULL; token = strtok(NULL, delim))
 					{
@@ -133,7 +130,7 @@ void Data_new(FILE* file, Data* dat) {
 					  }
 					}
 					break;
-				case 12:
+				case 11:
 					arrayIdx=0;
 					for (token = strtok(line, delim); token != NULL; token = strtok(NULL, delim))
 					{
@@ -157,7 +154,7 @@ void Data_new(FILE* file, Data* dat) {
 					  }
 					}
 					break;
-				case 13:
+				case 12:
 					arrayIdx=0;
 					for (token = strtok(line, delim); token != NULL; token = strtok(NULL, delim))
 					{
@@ -181,52 +178,52 @@ void Data_new(FILE* file, Data* dat) {
 					  }
 					}
 					break;
-                                case 14:
+                case 13:
 					dat->nroots=atol(line);
 					break;
-                                case 15:
+                case 14:
 					dat->s21a1=atol(line);
 					break;
-                                case 16:
+                case 15:
 					dat->s21a2=atol(line);
 					break;
-                                case 17:
+                case 16:
 					dat->s21b1=atol(line);
 					break;
-                                case 18:
+                case 17:
 					dat->s21b2=atol(line);
 					break;
-                                case 19:
+                case 18:
 					dat->s22a1=atol(line);
 					break;
-                                case 20:
+                case 19:
 					dat->s22a2=atol(line);
 					break;
-                                case 21:
+                case 20:
 					dat->s22b1=atol(line);
 					break;
-                                case 22:
+                case 21:
 					dat->s22b2=atol(line);
 					break;
-                                case 23:
+                case 22:
 					dat->s23a1=atol(line);
 					break;
-                                case 24:
+                case 23:
 					dat->s23a2=atol(line);
 					break;
-                                case 25:
+                case 24:
 					dat->s23b1=atol(line);
 					break;
-                                case 26:
+                case 25:
 					dat->s23b2=atol(line);
 					break;
-                                case 27:
+                case 26:
 					dat->postrou=atol(line);
 					break;
-                                case 28:
+                case 27:
 					dat->fix_trou1=atol(line);
 					break;
-                                case 29:
+                case 28:
 					dat->fix_trou2=atol(line);
 					break;
 		} /* end of switch */
