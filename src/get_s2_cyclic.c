@@ -778,7 +778,7 @@ void get_s2_cyclic(Vec xr, PetscInt *Istart, PetscInt *Iend, PetscScalar *valxr,
 //              if(mpiid==0)printf(" ii = %d xmat3 = %18f xmat4 = %18f diff = %18f\n", ii, xmat3, xmat4, (xmat3-xmat4));
           }
 
-  ierr = PetscTime(&tt2);CHKERRQ(ierr);
+  ierr = PetscTime(&tt2);
 //if(mpiid==0)printf(" norm3 = %18f norm4 = %18f xymat3= %18f xymat4= %18f\n", *norm3, *norm4, *xymat3, *xymat4);
 //ierr = PetscPrintf(PETSC_COMM_WORLD," Time used for the s2 loop: %f\n",tt2-tt1);CHKERRQ(ierr);
 }
