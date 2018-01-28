@@ -22,13 +22,16 @@
  * xymat    = the S^2 value
  */
 
-void get_s2(Vec xr, PetscInt *Istart, PetscInt *Iend, PetscScalar *valxr, int *natom, PetscReal *norm, PetscReal *norm2, PetscReal *norm3, PetscReal *norm4, PetscReal *xymat, PetscReal *xymat2, PetscReal *xymat3, PetscReal *xymat4, PetscReal *weight3,
-            int *s21a1, int *s21a2, int *s21b1,  int *s21b2,  int *s22a1,  int *s22a2,  int *s22b1, int *s22b2, int *s23a1,  int *s23a2,  int *s23b1, int *s23b2, int *postrou){
+void get_s2(Vec xr, PetscInt *Istart, PetscInt *Iend, PetscScalar *valxr, int *natom, 
+        PetscReal *norm, PetscReal *norm2, PetscReal *norm3, PetscReal *norm4, 
+        PetscReal *xymat, PetscReal *xymat2, PetscReal *xymat3, PetscReal *xymat4, PetscReal *weight3,
+            int *s21a1, int *s21a2, int *s21b1,  int *s21b2,  int *s22a1,  int *s22a2,  
+            int *s22b1, int *s22b2, int *s23a1,  int *s23a2,  int *s23b1, int *s23b2, int *postrou){
   const int            natomax=700;
   long int       iaa2, iaa;
   long int       iii;
-  long int			 ideter[natomax];
-  long int			 ideter2[natomax];
+  int			 ideter[natomax];
+  int			 ideter2[natomax];
   int 		   	 kko,kok,kkio;
   long int       ii;
   double         xmat=0.0;
@@ -678,6 +681,6 @@ void get_s2(Vec xr, PetscInt *Istart, PetscInt *Iend, PetscScalar *valxr, int *n
 
   ierr = PetscTime(&tt2);
 //printf(" norm = %18f weight = %18f weight/N = %18f tmpwe = %18f\n", *norm2, *weight3, *weight3/(*norm2),tmpwe);
-//printf(" norm = %18f %18f xymat = %18f %18f\n", *norm2, *norm3, *xymat2, *xymat3);
+//printf(" norm = %18f %18f xymat = %18f %18f | %d %d %d %d %d\n", *norm, *norm3, *xymat, *xymat3, *s22a1, *s22a2, *s22b1, *s22b2, *postrou);
 //ierr = PetscPrintf(PETSC_COMM_WORLD," Time used for the s2 loop: %f\n",tt2-tt1);CHKERRQ(ierr);
 }

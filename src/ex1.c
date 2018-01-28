@@ -104,7 +104,7 @@ int main(int argc,char **argv)
   MPI_Comm_rank(MPI_COMM_WORLD,&mpiid);
   ierr = MatGetOwnershipRange(A,&Istart,&Iend);CHKERRQ(ierr);
   ierr = PetscTime(&tt1);CHKERRQ(ierr);
-  ierr = PetscPrintf(PETSC_COMM_WORLD," start: %d end: %d\n",Istart, Iend);CHKERRQ(ierr);
+  ierr = PetscPrintf(PETSC_COMM_WORLD," start: %d end: %d | %d\n",Istart, Iend,getdata.natom);CHKERRQ(ierr);
 
 //  Iend = range[mpiid];
 //  if(mpiid==0){

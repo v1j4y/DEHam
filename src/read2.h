@@ -33,7 +33,7 @@ typedef struct {
 	int s23a2;
 	int s23b1;
 	int s23b2;
-	long int postrou;
+	int postrou;
 	long int fix_trou1;
 	long int fix_trou2;
 

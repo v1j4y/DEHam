@@ -27,8 +27,8 @@ void get_s2_cyclic(Vec xr, PetscInt *Istart, PetscInt *Iend, PetscScalar *valxr,
   const int            natomax=700;
   long int       iaa2, iaa;
   long int       iii;
-  long int			 ideter[natomax];
-  long int			 ideter2[natomax];
+  int			 ideter[natomax];
+  int			 ideter2[natomax];
   int 		   	 kko,kok,kkio,kk;
   int 		   	 kko2,kok2;
   long int       ii;
