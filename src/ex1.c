@@ -33,10 +33,7 @@ int main(int argc,char **argv)
   PetscInt       i,Istart,Iend,col[natomax],maxit,its,nconv,countcol;
   PetscInt		 nev, ncv, mpd;
   PetscLogDouble t1,t2,tt1,tt2;
-//PetscBool      FirstBlock=PETSC_FALSE,LastBlock=PETSC_FALSE;
   PetscErrorCode ierr;
-//PetscScalar    eigr;
-//PetscScalar    eigi;
   int            mpiid;
 
   char const* const fileName = argv[1];
@@ -44,16 +41,14 @@ int main(int argc,char **argv)
   Data getdata;
   PetscInt		 nlocal;
   
+  /* gather the input data */
   Data_new(file, &getdata);
   getdata.n = get_ntot(getdata.FAM1, getdata.natom, getdata.isz, getdata.ntrou, getdata.fix_trou1, getdata.fix_trou2);
 
   nlocal = getdata.n/getdata.npar;
-//printf("n=%ld\t nsites=%d\t nnz=%ld\t npar=%ld\t ntrou=%ld\t isz=%ld\n",getdata.n,getdata.natom, getdata.nnz,getdata.npar,getdata.ntrou,getdata.isz);
-
 
   PetscScalar	 *valxr;
   PetscInt	   	 indxr[nlocal];
-//Vec            Vr,Vi;
   char           filename[PETSC_MAX_PATH_LEN]="FIL666";
   PetscViewer    viewer;
   PetscBool      ishermitian;
@@ -98,30 +93,18 @@ int main(int argc,char **argv)
   ierr = MatCreate(PETSC_COMM_WORLD,&A);CHKERRQ(ierr);
   ierr = MatCreateAIJ(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,getdata.n,getdata.n,10*getdata.natom,NULL,10*getdata.natom,NULL,&A);CHKERRQ(ierr);
   ierr = MatMPIAIJSetPreallocation(A,10*getdata.natom,NULL,10*getdata.natom,NULL);CHKERRQ(ierr);
-//ierr = MatSetFromOptions(A);CHKERRQ(ierr);
-//ierr = MatSetUp(A);CHKERRQ(ierr);
 
   MPI_Comm_rank(MPI_COMM_WORLD,&mpiid);
   ierr = MatGetOwnershipRange(A,&Istart,&Iend);CHKERRQ(ierr);
   ierr = PetscTime(&tt1);CHKERRQ(ierr);
-  ierr = PetscPrintf(PETSC_COMM_WORLD," start: %d end: %d | %d\n",Istart, Iend,getdata.natom);CHKERRQ(ierr);
+  ierr = PetscPrintf(PETSC_COMM_WORLD," start: %d end: %d \n",Istart, Iend);CHKERRQ(ierr);
 
-//  Iend = range[mpiid];
-//  if(mpiid==0){
-//      Istart = 0;
-//  }
-//  else{
-//      Istart = range[mpiid-1];
-//  }
   for (i=Istart; i<Iend; i+=getdata.nnz) {
       tcountcol2=0;
       for(kk=0;kk<getdata.nnz;kk++){
           tcountcol[kk]=0;
       }
       iii=i+1;
-//    if(i%getdata.npar == 0 && mpiid==0){
-//      ierr = PetscTime(&t1);CHKERRQ(ierr);
-//    }
       unit_l1_(
             getdata.l1,
             getdata.l2,
@@ -131,6 +114,7 @@ int main(int argc,char **argv)
             getdata.xjjxy,
             getdata.xjjz ,
             getdata.xtt ,
+            getdata.E ,
             tcountcol,
             &getdata.ntrou,
             &getdata.isz,
@@ -147,7 +131,6 @@ int main(int argc,char **argv)
         for(kk=0;kk<tcountcol[ll]+1;kk++){
             value[kk] = val[kk+tcountcol2];
             col[kk] = tcol[kk+tcountcol2]-1;
-//          PetscPrintf(PETSC_COMM_WORLD,"value = %f col = %d\n",value[kk],col[kk]);
         }
         for(kk=tcountcol2+tcountcol[ll]+1;kk<natomax;kk++){
             value[kk] = 0.0;
@@ -169,8 +152,6 @@ int main(int argc,char **argv)
   ierr = MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
   ierr = PetscTime(&tt2);CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD," Time used to assemble the matrix: %f\n",tt2-tt1);CHKERRQ(ierr);
-//ierr = MatGetVecs(A,NULL,&xr);CHKERRQ(ierr);
-//ierr = MatGetVecs(A,NULL,&xi);CHKERRQ(ierr);
   ierr = MatCreateVecs(A,NULL,&xr);CHKERRQ(ierr);
   ierr = MatCreateVecs(A,NULL,&xi);CHKERRQ(ierr);
 
@@ -208,9 +189,8 @@ int main(int argc,char **argv)
   /*
      Save eigenvectors, if  == ested
   */
-//PetscOptionsGetString(NULL,NULL,"-evecs",filename,PETSC_MAX_PATH_LEN,&evecs);
   EPSGetConverged(eps,&nconv);
-  if (0) {
+  if (getdata.print_wf) {
     PetscViewerASCIIOpen(PETSC_COMM_WORLD,filename,&viewer);
   	PetscViewerSetFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);
   	PetscViewerSetFormat(viewer,PETSC_VIEWER_ASCII_SYMMODU);
@@ -254,10 +234,6 @@ int main(int argc,char **argv)
 	  norm3 = 0.0;
 	  norm4 = 0.0;
 
-
-//  	  for (ii=Istart; ii<Iend; ii+=1) {
-//		  indxr[ii-Istart] = ii;
-//	  }
 
 //        ierr = PetscTime(&tt1);CHKERRQ(ierr);
 //        ierr = VecGetArray(xr, &valxr);CHKERRQ(ierr);
@@ -336,34 +312,12 @@ int main(int argc,char **argv)
             W3=weight3fin/normfin2;
 //          W3=weight3fin;
           }
-//        ierr = PetscTime(&tt2);CHKERRQ(ierr);
-//        ierr = PetscPrintf(PETSC_COMM_WORLD," Time used to calc par S^2: %f\n",tt2-tt1);CHKERRQ(ierr);
 
-//PetscPrintf(PETSC_COMM_WORLD,"\n norm = %18f xymat =  %18f S^2 = %18f \n", norm4, xymat4, norm3);
   xymatfin = 0.0;
   normfin = 0.0;
 
-           /* sequential version of analyse */
-
-//           ierr = PetscTime(&tt1);CHKERRQ(ierr);
-//           VecScatterCreateToAll(xr,&scatter,&vec2);
-//           VecScatterBegin(scatter,xr,vec2,INSERT_VALUES,SCATTER_FORWARD);
-//           VecScatterEnd(scatter,xr,vec2,INSERT_VALUES,SCATTER_FORWARD);
-//           VecGetArray(vec2,&values);
-//           if(mpiid == 0){
-//             Istart = 0;
-//             Iend   = getdata.n;
-//             analyse_(values, (Iend-Istart), &Istart, &Iend, &xymat, &norm);
-//             XS=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin/normfin)));
-//             printf("\n norm = %18f xymat =  %18f S^2 = %18f \n", norm, xymat, XS);
-//           }
-//           VecRestoreArray(vec2,&values);
-//           ierr = PetscTime(&tt2);CHKERRQ(ierr);
-//           PetscPrintf(PETSC_COMM_WORLD,"seq time = %18f\n",tt2-tt1);
-
-
       /*
-         Compute the relative error associated to each eigenpair
+       * Compute the relative error associated to each eigenpair
       */
       ierr = EPSComputeError(eps,i,EPS_ERROR_RELATIVE,&error);CHKERRQ(ierr);
 
@@ -385,8 +339,6 @@ int main(int argc,char **argv)
     ierr = PetscPrintf(PETSC_COMM_WORLD,"\n");CHKERRQ(ierr);
   }
 
-//VecScatterDestroy(&scatter);
-//VecDestroy(&vec2); 
   ierr = EPSDestroy(&eps);CHKERRQ(ierr);
   ierr = MatDestroy(&A);CHKERRQ(ierr);
   ierr = VecDestroy(&xr);CHKERRQ(ierr);

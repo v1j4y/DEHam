@@ -11,9 +11,9 @@ void Data_new(FILE* file, Data* dat) {
 
 	while (fgets(line, sizeof(line), file)) {
 	
-	    /* note that fgets don't strip the terminating \n, checking its
-	       presence would allow to handle lines longer that sizeof(line) */
-	  if (count != 28){
+	    /* note that fgets doesn't strip the terminating \n, checking its
+	       presence would allow to handle lines longer than sizeof(line) */
+	  if (count != 30){
 			count++;
 			switch(count){
 				case 1:
@@ -178,54 +178,84 @@ void Data_new(FILE* file, Data* dat) {
 					  }
 					}
 					break;
-                case 13:
-					dat->nroots=atol(line);
+				case 13:
+					arrayIdx=0;
+					for (token = strtok(line, delim); token != NULL; token = strtok(NULL, delim))
+					{
+					  double val;
+					  char *unconverted;
+					  /**
+					   * Convert the next token to a float value
+					   */
+					  val = strtof(token, &unconverted);
+					  if (!isspace(*unconverted) && *unconverted != 0)
+					  {
+					    /**
+					     * Bad input string.  Again, we just bail.
+					     */
+					    fprintf(stderr, "\"%s\" is not a valid floating-point number\n", token);
+					    break;
+					  }
+					  else
+					  {
+					    dat->E[arrayIdx++] = val;
+					  }
+					}
 					break;
                 case 14:
-					dat->s21a1=atol(line);
+					dat->nroots=atol(line);
 					break;
                 case 15:
-					dat->s21a2=atol(line);
+					dat->s21a1=atol(line);
 					break;
                 case 16:
-					dat->s21b1=atol(line);
+					dat->s21a2=atol(line);
 					break;
                 case 17:
-					dat->s21b2=atol(line);
+					dat->s21b1=atol(line);
 					break;
                 case 18:
-					dat->s22a1=atol(line);
+					dat->s21b2=atol(line);
 					break;
                 case 19:
-					dat->s22a2=atol(line);
+					dat->s22a1=atol(line);
 					break;
                 case 20:
-					dat->s22b1=atol(line);
+					dat->s22a2=atol(line);
 					break;
                 case 21:
-					dat->s22b2=atol(line);
+					dat->s22b1=atol(line);
 					break;
                 case 22:
-					dat->s23a1=atol(line);
+					dat->s22b2=atol(line);
 					break;
                 case 23:
-					dat->s23a2=atol(line);
+					dat->s23a1=atol(line);
 					break;
                 case 24:
-					dat->s23b1=atol(line);
+					dat->s23a2=atol(line);
 					break;
                 case 25:
-					dat->s23b2=atol(line);
+					dat->s23b1=atol(line);
 					break;
                 case 26:
-					dat->postrou=atol(line);
+					dat->s23b2=atol(line);
 					break;
                 case 27:
-					dat->fix_trou1=atol(line);
+					dat->postrou=atol(line);
 					break;
                 case 28:
+					dat->fix_trou1=atol(line);
+					break;
+                case 29:
 					dat->fix_trou2=atol(line);
 					break;
+				case 30:
+					dat->print_wf = atol(line);
+					break;
+                default:
+                    printf("Done reading file\n");
+                    break;
 		} /* end of switch */
 
 	  } /* end of the input file */
@@ -236,10 +266,13 @@ void Data_new(FILE* file, Data* dat) {
 }
 
 _Bool to_bool(const char* str) {
-    PetscBool strflg;
+    PetscBool strflg=PETSC_FALSE;
     PetscStrcmp("true\n",str, &strflg);
-    if(!strflg) PetscStrcmp("True\n",str, &strflg);
-    if(!strflg) PetscStrcmp("TRUE\n",str, &strflg);
+    if(strflg != PETSC_TRUE) PetscStrcmp("True\n",str, &strflg);
+    if(strflg != PETSC_TRUE) PetscStrcmp("TRUE\n",str, &strflg);
+    if(strflg != PETSC_TRUE) PetscStrcmp("true",str, &strflg);
+    if(strflg != PETSC_TRUE) PetscStrcmp("True",str, &strflg);
+    if(strflg != PETSC_TRUE) PetscStrcmp("TRUE",str, &strflg);
     return strflg;
 }
 

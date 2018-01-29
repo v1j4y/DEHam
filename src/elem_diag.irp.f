@@ -28,6 +28,10 @@
 !       if(yw)write(6,*)iaa,'diag,v1'
 !         endif
        enddo
+       do i=1, natom
+            if(deter(i).ne.3) xmatd = xmatd + E(i)
+       enddo
+       xmatd = xmatd - E(natom+1)
 
 !-----stockage de l element diag
 
