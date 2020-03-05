@@ -6,6 +6,6 @@ BEGIN_PROVIDER [integer(C_SIZE_T), nt2]
 
 
 !   call combin(idet2(1,nt2+1),natrest,ial0,nt2,32,jrangmax)
-    nt2=   nint(gamma(real(natom-ntrou+1,16))/((gamma(real(nalpha+1,16))*gamma(real(nbeta+1,16)))),selected_int_kind(16))
+    nt2=   nint(gamma(1.0*(natom-ntrou+1))/((gamma(1.0*(nalpha+1))*gamma(1.0*(nbeta+1)))),selected_int_kind(16))
     print *,"nt2=",nt2
 END_PROVIDER

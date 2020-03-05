@@ -123,9 +123,9 @@ int main(int argc,char **argv)
             &getdata.FAM1,
             tcol,
             val);
-      if(i%getdata.npar == 0 && mpiid==0){
-        ierr = PetscPrintf(PETSC_COMM_WORLD," i: %d \n",i);CHKERRQ(ierr);
-      }
+//    if(i%getdata.npar == 0 && mpiid==0){
+//      ierr = PetscPrintf(PETSC_COMM_WORLD," i: %d \n",i);CHKERRQ(ierr);
+//    }
       for(ll=0;ll<getdata.nnz;ll++){
 
         for(kk=0;kk<tcountcol[ll]+1;kk++){
@@ -164,7 +164,6 @@ int main(int argc,char **argv)
   tol = 1.e-9;
   maxit = 10000000;
   ierr = EPSSetTolerances(eps,tol,maxit);CHKERRQ(ierr);
-  nev  = 4;
   ncv  = 10;
   mpd  = 10;
   nev  = getdata.nroots;

@@ -15,6 +15,6 @@ BEGIN_PROVIDER [integer(C_SIZE_T), nt1]
             natom2 = fix_trou2 - fix_trou1
         endif
     endif
-    nt1=   nint(gamma(real(natom2+1,16))/(gamma(real(natom2-ntrou+1,16))*gamma(real(ntrou+1,16))),selected_int_kind(16))
+    nt1=   nint(gamma(1.0*(natom2+1))/(gamma(1.0*(natom2-ntrou+1))*gamma(1.0*(ntrou+1))),selected_int_kind(16))
     write(6,*)'nt1',nt1
 END_PROVIDER
