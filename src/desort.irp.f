@@ -1,14 +1,15 @@
 subroutine desort()
+    use iso_c_binding
     implicit none
     integer::i,j,ord,ordh
-    integer(kind=selected_int_kind(16))::add,addh,det,deth,addt
+    integer(C_SIZE_T)::add,addh,deti,dethi,addt
 
     do i=1,detfound-1
         do j=i+1,detfound
             if(foundaddh(i,3).gt.foundaddh(j,3))then
-                deth = foundaddh(i,1)
+                dethi = foundaddh(i,1)
                 foundaddh(i,1) = foundaddh(j,1)
-                foundaddh(j,1) = deth
+                foundaddh(j,1) = dethi
                 addh = foundaddh(i,2)
                 foundaddh(i,2) = foundaddh(j,2)
                 foundaddh(j,2) = addh
@@ -17,9 +18,9 @@ subroutine desort()
                 foundaddh(j,3) = ordh
             endif
             if(foundadd(i,3).gt.foundadd(j,3))then
-                det = foundadd(i,1)
+                deti = foundadd(i,1)
                 foundadd(i,1) = foundadd(j,1)
-                foundadd(j,1) = det
+                foundadd(j,1) = deti
                 add = foundadd(i,2)
                 foundadd(i,2) = foundadd(j,2)
                 foundadd(j,2) = add

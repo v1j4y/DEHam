@@ -1,17 +1,18 @@
 subroutine searchdetfull()
+    use iso_c_binding
     BEGIN_DOC
     ! this subroutine is at the heart of the idea
     ! it will generate all the determinants in a fixed order
     ! then find the posistion of the determinant given and
     ! return it's position in add.
     END_DOC
-!   integer(kind=selected_int_kind(16)),INTENT(INOUT)::foundetadr(maxlien,4)
-    integer(kind=selected_int_kind(16))::add
-!   integer(kind=selected_int_kind(16)),INTENT(INOUT)::deth
-    integer(kind=selected_int_kind(16))::dethsh
-    integer(kind=selected_int_kind(16))::addh
-    integer(kind=selected_int_kind(16))::a
-    integer(kind=selected_int_kind(16))::i
+!   integer(C_SIZE_T),INTENT(INOUT)::foundetadr(maxlien,4)
+    integer(C_SIZE_T)::add
+!   integer(C_SIZE_T),INTENT(INOUT)::deth
+    integer(C_SIZE_T)::dethsh
+    integer(C_SIZE_T)::addh
+    integer(C_SIZE_T)::a
+    integer(C_SIZE_T)::i
     integer::const,count
     i=1
     a=0

@@ -1,8 +1,9 @@
+use iso_c_binding
 BEGIN_PROVIDER[integer, foundet,(natomax,maxlien)]
-&BEGIN_PROVIDER[integer(kind=selected_int_kind(16)), foundetadr,(maxlien)]
+&BEGIN_PROVIDER[integer(C_SIZE_T), foundetadr,(maxlien)]
 &BEGIN_PROVIDER[real, foundetdmat,(maxlien)]
-&BEGIN_PROVIDER[integer(kind=selected_int_kind(16)), foundadd,(maxlien,3)]
-&BEGIN_PROVIDER[integer(kind=selected_int_kind(16)), foundaddh,(maxlien,3)]
+&BEGIN_PROVIDER[integer(C_SIZE_T), foundadd,(maxlien,3)]
+&BEGIN_PROVIDER[integer(C_SIZE_T), foundaddh,(maxlien,3)]
 &BEGIN_PROVIDER[integer, detfound]
     BEGIN_DOC
     ! provides all found determinants

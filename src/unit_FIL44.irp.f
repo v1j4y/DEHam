@@ -3,19 +3,19 @@
     BEGIN_DOC
     ! file units for writing
     END_DOC
-
+    use iso_c_binding
     implicit none
     integer :: i,j,k,ia1,ia2,l,m,chcind,chcval,ii,tistart2
     integer :: count,unit_44,unit_33
     integer :: iat,nbtots
-    integer(kind=selected_int_kind(16))::iaa
+    integer(C_SIZE_T)::iaa
     integer :: kkio,kkiok,n,nz,cdiag,cexdiag
     integer,allocatable ::ideter1(:),ideter2(:),deti(:),detj(:)
-    integer(kind=selected_int_kind(16)),dimension(maxlien) ::tl1,tl2,tktyp
-    integer(kind=selected_int_kind(16)),dimension(nrows)::tcountcol
-    integer(kind=selected_int_kind(16))::tistart
+    integer(C_SIZE_T),dimension(maxlien) ::tl1,tl2,tktyp
+    integer(C_SIZE_T),dimension(nrows)::tcountcol
+    integer(C_SIZE_T)::tistart
     real*8,dimension(maxlien)::tval
-    integer(kind=selected_int_kind(16)),dimension(maxlien)::tcol
+    integer(C_SIZE_T),dimension(maxlien)::tcol
     real*8 :: xmat
         integer :: ik,imat4,iaa2,iik
         integer :: ik1,ik2,jmat4,IC,ikmax,ikmin

@@ -1,0 +1,4 @@
+*bin/*
+*/obj/*
+*mod.mod*
+irpf90.a
