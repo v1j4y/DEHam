@@ -41,10 +41,9 @@ _Using DEHam_
    as explained below in a sample inputfile:
 
 ```python
-140   # The total number of determinants (Ndet)
-7     # The number of orbitals (total)
-1     # The largest number of non-zero elements per row (Multiple of Ndet)
-2     # The total number of processors used in parallel (Multiple of Ndet)
+8     # The number of orbitals (total)
+140   # The largest number of non-zero elements per row (Multiple of Ndet)
+1     # The total number of processors used in parallel (Multiple of Ndet)
 1     # The number of holes
 0     # The isz (ms-1/2) value
 true     # Restrict the hole to the 1'st (i.e. half of natom) Family of states. *false* for no restrictions
@@ -54,6 +53,8 @@ true     # Restrict the hole to the 1'st (i.e. half of natom) Family of states. 
 .1430,-0.20,0.0000	# The three types of links this line gives J, K
 .1430,-0.20,0.0000	# 
 -1.00,0.0,0.00		# This line gives t
+1                   # Currently unused (Perhaps can be used for potential energy per site in the future.)
+1                   # The total number of roots
 ```
 
   2. running DEHam
