@@ -53,8 +53,24 @@ true     # Restrict the hole to the 1'st (i.e. half of natom) Family of states. 
 .1430,-0.20,0.0000	# The three types of links this line gives J, K
 .1430,-0.20,0.0000	# 
 -1.00,0.0,0.00		# This line gives t
-1                   # Currently unused (Perhaps can be used for potential energy per site in the future.)
-1                   # The total number of roots
+0.,0.,0.,0.,0.,0.,0.,0. # Energy of each orbital
+2                   # The total number of roots
+1                   # I   The position of the first
+1                   # I   SBox
+1                   # I
+1                   # I
+1                   # II  The positions of the second
+1                   # II  SBox
+1                   # II
+1                   # II
+1                   # III
+1                   # III The positions of the third
+1                   # III SBox
+1                   # III
+1                   # positio of the hole
+0                   # fix the position of the first hole during the CI
+0                   # fix the position of the second hole during the CI
+0                   # Print the wavefunction. It is stored in the FIL666 file after the run
 ```
 
   2. running DEHam
