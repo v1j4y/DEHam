@@ -33,6 +33,9 @@ export C_INCLUDE_PATH+=:$PETSC_DIR/include/:$SLEPC_DIR/include:$PETSC_DIR/arch-l
 make ex1
 ```
 
+[![asciicast](https://asciinema.org/a/Ng3tSNDoWBkV5C9ZYvbxCW43B.png)](https://asciinema.org/a/Ng3tSNDoWBkV5C9ZYvbxCW43B)
+
+
 _Using DEHam_
 ---------------
 
