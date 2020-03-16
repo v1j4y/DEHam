@@ -56,7 +56,7 @@ true     # Restrict the hole to the 1'st (i.e. half of natom) Family of states. 
 .1430,-0.20,0.0000	# The three types of links this line gives J, K
 .1430,-0.20,0.0000	# 
 -1.00,0.0,0.00		# This line gives t
-0.,0.,0.,0.,0.,0.,0.,0. # Energy of each orbital
+0.,0.,0.,0.,0.,0.,0.,0.,0. # Energy of each orbital + one extra term
 2                   # The total number of roots
 1                   # I   The position of the first
 1                   # I   SBox
