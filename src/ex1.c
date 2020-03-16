@@ -121,6 +121,7 @@ int main(int argc,char **argv)
             &getdata.fix_trou1,
             &getdata.fix_trou2,
             &getdata.FAM1,
+            &mpiid,
             tcol,
             val);
 //    if(i%getdata.npar == 0 && mpiid==0){
@@ -128,9 +129,11 @@ int main(int argc,char **argv)
 //    }
       for(ll=0;ll<getdata.nnz;ll++){
 
+//      printf("%d) ll=%d countcol=%d\n",i,ll,tcountcol[ll]+1);
         for(kk=0;kk<tcountcol[ll]+1;kk++){
             value[kk] = val[kk+tcountcol2];
             col[kk] = tcol[kk+tcountcol2]-1;
+//          printf("%d) kk=%d col=%d val=%1.4f\n",i,kk,col[kk],value[kk]);
         }
         for(kk=tcountcol2+tcountcol[ll]+1;kk<natomax;kk++){
             value[kk] = 0.0;
@@ -211,8 +214,8 @@ int main(int argc,char **argv)
   if (nconv>0) {
 
     ierr = PetscPrintf(PETSC_COMM_WORLD,
-         "           k          ||Ax-kx||/||kx||        <S^2>\n"
-         "   ----------------- ----------------- ------------------\n");CHKERRQ(ierr);
+         "               k          ||Ax-kx||/||kx||         <S>\n"
+         "       ----------------- ----------------- ------------------\n");CHKERRQ(ierr);
 
    for(i=0;i<nev;i++){
 

@@ -88,6 +88,7 @@
         enddo
 !       print *,"tistart =", tistart,"countcol =", countcol,"\n",(tcountcol(i),i=1,nrows)
 !       print *,""
-!       print *,(tcol(i),i=1,maxlien)
+!       print *,(tval(i),i=1,maxdet)
+!       print *,(tcol(i),i=1,maxdet)
     deallocate(ideter2)
     end

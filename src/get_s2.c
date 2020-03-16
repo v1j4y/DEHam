@@ -675,7 +675,8 @@ void get_s2(Vec xr, PetscInt *Istart, PetscInt *Iend, PetscScalar *valxr, int *n
                 *xymat2=*xymat2+xmat2;
                 *xymat3=*xymat3+xmat3;
                 *xymat4=*xymat4+xmat4;
-//              if(mpiid==3)printf(" ii = %d norm = %18f %18f 3 = %18f 4 = %18f\n", ii, *norm2, *norm3, *xymat2, *xymat3);
+//              if(mpiid==0)printf(" ii = %d norm = %18f %18f 3 = %18f 4 = %18f\n", ii, *norm2, *norm3, *xymat2, *xymat3);
+//              printf(" %d) ii = %d norm = %18f xymat = %18f 3 = %18f 4 = %18f\n",mpiid, ii, *norm, *xymat, *norm3, *xymat2, *xymat3);
           }
 
   ierr = PetscTime(&tt2);
