@@ -94,33 +94,41 @@ BEGIN_PROVIDER [integer, natom]
 
 !      FAM1=.TRUE. 
        yham=.TRUE.
-       write(6,*)'HAMILTONIEN t-J'
-       write(6,*)'Le nombre de trou est : ',ntrou
-       write(6,*)'Famille 1 : ',FAM1
-       if(FAM1) then
-        if(fix_trou1 .ne. fix_trou2) write(6,*)'Trou fixe entre :', fix_trou1, "et ", fix_trou2
+       if(mpiid==0)then
+         write(6,*)'HAMILTONIEN t-J'
+         write(6,*)'Le nombre de trou est : ',ntrou
+         write(6,*)'Famille 1 : ',FAM1
+         if(FAM1) then
+          if(fix_trou1 .ne. fix_trou2) write(6,*)'Trou fixe entre :', fix_trou1, "et ", fix_trou2
+         endif
        endif
 !---------------------------------------------
-      write(6,*)' '
-      write(6,*)' '
-      write(6,*)'LECTURE DES ATOMES, DES LIAISONS, DES INTEGRALES'
-      write(6,*)' '
-      write(6,*)' '
+      if(mpiid==0)then
+        write(6,*)' '
+        write(6,*)' '
+        write(6,*)'LECTURE DES ATOMES, DES LIAISONS, DES INTEGRALES'
+        write(6,*)' '
+        write(6,*)' '
+      endif
 !-----------Lecture 1ier voisin
 !     read(5,clust)
         jclust=jclust+1
 	if(yw)write(6,*)' '
-	write(6,*)'================ CLUSTER',jclust,'=================='
-	write(6,*)' '
+  if(mpiid==0)then
+	  write(6,*)'================ CLUSTER',jclust,'=================='
+	  write(6,*)' '
+  endif
 !------------------------
        do i=1,maxlien
 	  if(l1(i).eq.0)EXIT
 	  nlien=i
        enddo
 
+     if(mpiid==0)then
         if(yw)write(6,*)(l1(i),i=1,maxlien)
 
        write(6,*)'Liaisons entre les atomes',nlien
+     endif
 
        do i=1,natomax
 	  y(i)=.false.
@@ -140,18 +148,22 @@ BEGIN_PROVIDER [integer, natom]
 	  y(l1(i))=.true.
           y(l2(i))=.true.
           ltyp(nlientot+i)=ktyp(i)
+     if(mpiid==0)then
        write(6,*)'Les atomes ',l1(i),' et ',l2(i),' forment la liaison', &
       ilien(l1(i),l2(i)),'qui est de type',ltyp(i)
           if(yw)write(6,*)'iliatom1',iliatom1(i)
+     endif
        enddo
           nlientot=nlientot+nlien
 
       do i=1,natomax
        if(y(i))natom=natom+1
       enddo
-      write(6,*)'============================================='
-      write(6,*)'Le nombre total d atomes est ',natom
-      write(6,*)'============================================='
+      if(mpiid==0)then
+        write(6,*)'============================================='
+        write(6,*)'Le nombre total d atomes est ',natom
+        write(6,*)'============================================='
+      endif
 
 !----------------------------------------------------------------
 !----------------Voisins---------------------
@@ -210,24 +222,28 @@ BEGIN_PROVIDER [integer, natom]
 !C    xjjxy=(/.1000d0,-0.8d0,0.000d0/)
 !C    xtt=(/-1.0000d0,0.d0,0.0d0/)
 
-       write(6,*)'Nombre de J differents',ityp
        do ikl=1,nlientot
          Ykl(ikl)=.false.
        enddo
-       do il=1,nlientot
-          write(6,*)'type de liaison',il,ltyp(il)
-       enddo
-       do iiki=1,ityp
-          write(6,*)'type de J',xjjz(iiki)
-       enddo
+       if(mpiid==0)then
+         write(6,*)'Nombre de J differents',ityp
+         do il=1,nlientot
+            write(6,*)'type de liaison',il,ltyp(il)
+         enddo
+         do iiki=1,ityp
+            write(6,*)'type de J',xjjz(iiki)
+         enddo
+       endif
        do il=1,nlientot
          if(.not.ykl(il))then
           xjz(il)=xjjz(ltyp(il))
-          write(6,*)'Parametres : Jz',il,'=',xjz(il)
           xjxy(il)=xjjxy(ltyp(il))
-          write(6,*)'Parametres : Jxy',il,'=',xjxy(il)
           xt(il)=xtt(ltyp(il))
-          write(6,*)'Parametre : t',il,'=',xt(il)
+          if(mpiid==0)then
+            write(6,*)'Parametres : Jz',il,'=',xjz(il)
+            write(6,*)'Parametres : Jxy',il,'=',xjxy(il)
+            write(6,*)'Parametre : t',il,'=',xt(il)
+          endif
           ykl(il)=.true.
          endif
        enddo
@@ -248,26 +264,28 @@ BEGIN_PROVIDER [integer, natom]
         xenediagT=0.000d0
         xspar=-0.00d0
         xsperp=-0.00d0
-       write(6,*)'coucoudslect3'
-      write(6,*)'coucou'
-	write(6,*)'Parametres pour le t-J'
-	 write(6,*)'xj1 = ',xj1
-	 write(6,*)'xj2 = ',xj2
-	 write(6,*)'xt1 = ',xt1
-	 write(6,*)'xt2 = ',xt2
-	 write(6,*)'xv1 = ',xv1
-	 write(6,*)'xv2 = ',xv2
-	 write(6,*)'xv3 = ',xv3
-	 write(6,*)'xbj = ',xbj
-	 write(6,*)'xbt = ',xbt
-	 write(6,*)'xeneparJ = ',xeneparJ
-	 write(6,*)'xeneperpJ = ',xeneperpJ
-	 write(6,*)'xeneparT = ',xeneparT
-	 write(6,*)'xeneperpT = ',xeneperpT
-	 write(6,*)'xenediagJ = ',xenediagJ
-	 write(6,*)'xenediagT = ',xenediagT
-	 write(6,*)'xspar = ',xspar
-	 write(6,*)'xsperp = ',xsperp
+        if(mpiid==0)then
+          write(6,*)'coucoudslect3'
+          write(6,*)'coucou'
+	        write(6,*)'Parametres pour le t-J'
+	        write(6,*)'xj1 = ',xj1
+	        write(6,*)'xj2 = ',xj2
+	        write(6,*)'xt1 = ',xt1
+	        write(6,*)'xt2 = ',xt2
+	        write(6,*)'xv1 = ',xv1
+	        write(6,*)'xv2 = ',xv2
+	        write(6,*)'xv3 = ',xv3
+	        write(6,*)'xbj = ',xbj
+	        write(6,*)'xbt = ',xbt
+	        write(6,*)'xeneparJ = ',xeneparJ
+	        write(6,*)'xeneperpJ = ',xeneperpJ
+	        write(6,*)'xeneparT = ',xeneparT
+	        write(6,*)'xeneperpT = ',xeneperpT
+	        write(6,*)'xenediagJ = ',xenediagJ
+	        write(6,*)'xenediagT = ',xenediagT
+	        write(6,*)'xspar = ',xspar
+	        write(6,*)'xsperp = ',xsperp
+        endif
 !===================================================================
 !====================================================================
 !       calcul des plaquettes pour un 2D t-J
@@ -315,11 +333,13 @@ BEGIN_PROVIDER [integer, natom]
 	      enddo
            enddo
       enddo
-      write(6,*)'Le systeme comporte ',nplac,' plaquettes.'
-      do kko=1,nplac
-         write(6,*)'La plaquette ',kko,' est contituee des atomes',&
-      iplac(1,kko),' ',iplac(2,kko),' ',iplac(3,kko),' et ',iplac(4,kko)
-      enddo
+      if(mpiid==0)then
+        write(6,*)'Le systeme comporte ',nplac,' plaquettes.'
+        do kko=1,nplac
+           write(6,*)'La plaquette ',kko,' est contituee des atomes',&
+        iplac(1,kko),' ',iplac(2,kko),' ',iplac(3,kko),' et ',iplac(4,kko)
+        enddo
+      endif
 !===================================================================
 !   isz=0
     IPREC=8
@@ -332,6 +352,7 @@ BEGIN_PROVIDER [integer, natom]
     xseuil=1.0E-008
     ysuiv=.FALSE.
     yec=.TRUE.
+    if(mpiid==0)then
       write(6,*)'Spin total',isz
       write(6,*)'Nombre de vecteurs demande',nvec
       write(6,*)'Nombre maximal d iterations de Davidson',niter
@@ -344,12 +365,15 @@ BEGIN_PROVIDER [integer, natom]
 !     write(6,*)Emin
 !     write(6,*)Emax
 !     write(6,*)M0
+    endif
       if(yham)then
       IAL0=(natom-ntrou)/2+mod(natom-ntrou,2)+isz
       else
       IAL0=(natom)/2+mod(natom,2)+isz
       endif
-      write(6,*)'=======nombre de centres de spin alpha=====',ial0
+      if(mpiid==0)then
+        write(6,*)'=======nombre de centres de spin alpha=====',ial0
+      endif
       natrest=natom-ntrou
 
     !C calculating nalpha and nbeta

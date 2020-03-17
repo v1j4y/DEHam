@@ -33,6 +33,9 @@ export C_INCLUDE_PATH+=:$PETSC_DIR/include/:$SLEPC_DIR/include:$PETSC_DIR/arch-l
 make ex1
 ```
 
+[![asciicast](https://asciinema.org/a/Ng3tSNDoWBkV5C9ZYvbxCW43B.png)](https://asciinema.org/a/Ng3tSNDoWBkV5C9ZYvbxCW43B)
+
+
 _Using DEHam_
 ---------------
 
@@ -53,15 +56,41 @@ true     # Restrict the hole to the 1'st (i.e. half of natom) Family of states. 
 .1430,-0.20,0.0000	# The three types of links this line gives J, K
 .1430,-0.20,0.0000	# 
 -1.00,0.0,0.00		# This line gives t
-1                   # Currently unused (Perhaps can be used for potential energy per site in the future.)
-1                   # The total number of roots
+0.,0.,0.,0.,0.,0.,0.,0.,0. # Energy of each orbital + one extra term
+2                   # The total number of roots
+1                   # I   The position of the first
+1                   # I   SBox
+1                   # I
+1                   # I
+1                   # II  The positions of the second
+1                   # II  SBox
+1                   # II
+1                   # II
+1                   # III
+1                   # III The positions of the third
+1                   # III SBox
+1                   # III
+1                   # positio of the hole
+0                   # fix the position of the first hole during the CI
+0                   # fix the position of the second hole during the CI
+0                   # Print the wavefunction. It is stored in the FIL666 file after the run
 ```
 
   2. running DEHam
 
 ```shell
-mpiexec -n [nprocs] ./ex1 inpfile 
+mpiexec -n [nprocs] ./bin/ex1 input_file.inp
 ```
+
+_Sample Application_
+--------------------
+
+A 2D t-J model Hamiltonian description and setup for using DEHam to solve for few low lying states
+is provided in the notbooks folder. Please have a look about the details of using DEHam to study
+t-J Hamiltonians.
+
+![](https://raw.githubusercontent.com/v1j4y/DEHam/master/notebooks/graph.png)
+
 
 _Publications using this code_
 -------------------------------

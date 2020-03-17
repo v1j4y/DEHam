@@ -17,5 +17,6 @@ void unit_l1_(
             long int *,
             _Bool *,
             long int *,
+            long int *,
             double *);
 

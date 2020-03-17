@@ -16,5 +16,7 @@ BEGIN_PROVIDER [integer(C_SIZE_T), nt1]
         endif
     endif
     nt1=   nint(gamma(1.0*(natom2+1))/(gamma(1.0*(natom2-ntrou+1))*gamma(1.0*(ntrou+1))),selected_int_kind(16))
-    write(6,*)'nt1',nt1
+    if(mpiid==0)then
+      write(6,*)'nt1',nt1
+    endif
 END_PROVIDER

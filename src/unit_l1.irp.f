@@ -13,10 +13,11 @@
         tfix_trou1,            &
         tfix_trou2,            &
         tfam1,                 &
+        tmpiid,                &
         tcol,tval)
         use iso_c_binding
         implicit none
-        integer,INTENT(INOUT)::tistart, tnrows
+        integer,INTENT(INOUT)::tistart, tnrows, tmpiid
         integer,INTENT(INOUT)::tntrou, tisz
         integer,INTENT(INOUT)::tfix_trou1, tfix_trou2
         logical*1,INTENT(INOUT)::tfam1
@@ -45,7 +46,8 @@
         fix_trou2 = tfix_trou2
         tcol=0
         tval=0d0
-        provide l1 l2 ktyp xtt xjjxy xjjz ntrou
+        mpiid=tmpiid
+        provide l1 l2 ktyp xtt xjjxy xjjz ntrou mpiid
 !print *,"l1"
 !print *,l1
 !print *,"xjjz"

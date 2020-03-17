@@ -18,10 +18,10 @@
 !      if(.not.redo)write(6,*)'vijayyves'
        do i=1,nlientot
           if(yalt(i))then
-!               xmatd=-(xj1+xeneJ(i)*xbJ)+xmatd
-                xmatd= -(xjz(i))+xmatd
-	       if(yw)write(6,*)xmatd,'xmatd'
-	       if(yw)write(6,*)'xjz',xjz(i)
+!           xmatd=-(xj1+xeneJ(i)*xbJ)+xmatd
+            xmatd= -(xjz(i))+xmatd
+	          if(yw)write(6,*)xmatd,'xmatd'
+	          if(yw)write(6,*)'xjz',xjz(i)
           endif
 !         if(yrep1(i))then
 !              xmat=xv1+xmat

@@ -24,12 +24,12 @@ subroutine getdet(add,ideter)
     detb = det(ib,1)
     deta = deth(ia,1)
     if(FAM1) then
-        if(fix_trou1 .eq. fix_trou2) then
-            deta = ISHFT(deta,-(natom/2))
-        else
-            natom2 = natom - (fix_trou2 - fix_trou1)
-            deta = ISHFT(deta, -natom2)
-        endif
+      if(fix_trou1 .eq. fix_trou2) then
+          deta = ISHFT(deta,-(natom/2))
+      else
+          natom2 = natom - (fix_trou2 - fix_trou1)
+          deta = ISHFT(deta, -natom2)
+      endif
     endif
 !    do while (i.le.(ib))
 !        const=1
@@ -50,7 +50,6 @@ subroutine getdet(add,ideter)
 !        i+=1
 !        write(6,14)deta,deta
 !    enddo
-    const=0
     if(FAM1) then
         if(fix_trou1 .eq. fix_trou2) then
             natom2 = natom/2
@@ -66,6 +65,12 @@ subroutine getdet(add,ideter)
             ideter((natom2)-i)=3
         endif
     enddo
+!   do i=ib-2,ib+2
+!     print *,i," det=",det(i,1)," add=",det(i,2)
+!   enddo
+!   print *,"add=",ib," detb=",detb
+!   write(6,*)(ideter(i),i=1,natom)
+    const=0
     do i=0,natom-1
         if(ideter(natom-i).eq.1)then
             if(BTEST(detb,const))then
