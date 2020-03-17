@@ -89,7 +89,7 @@ A 2D t-J model Hamiltonian description and setup for using DEHam to solve for fe
 is provided in the notbooks folder. Please have a look about the details of using DEHam to study
 t-J Hamiltonians.
 
-![4x4 Lattice](https://raw.githubusercontent.com/v1j4y/DEHam/master/notebook/graph.png)
+![](https://raw.githubusercontent.com/v1j4y/DEHam/master/notebooks/graph.png)
 
 
 _Publications using this code_
