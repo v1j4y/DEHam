@@ -79,7 +79,7 @@ true     # Restrict the hole to the 1'st (i.e. half of natom) Family of states. 
   2. running DEHam
 
 ```shell
-mpiexec -n [nprocs] ./ex1 inpfile 
+mpiexec -n [nprocs] ./bin/ex1 input_file.inp
 ```
 
 _Sample Application_
