@@ -96,6 +96,17 @@
           tistart=tistart+1
 
         enddo
+        
+!       Check for large number of extradiagonal terms
+        if(detfound + count1 > maxlien)then
+            write(6,*)" ===================================================="
+            write(6,*)" *****WARNING*****: The number of extradiagonal terms &
+               exceedes maximum dimension of :",maxlien,                     &
+               " \n The calculation will be unreliable. Decrease the number  &
+                of extradiagonal terms (nnz: second row in input) to solve   &
+                this problem or increase maxlien."
+            write(6,*)" ===================================================="
+        endif
 
         Touch foundet foundetadr detfound foundadd foundaddh foundetdmat det deth
         call adrfull()
