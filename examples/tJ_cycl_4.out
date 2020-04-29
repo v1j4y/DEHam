@@ -1,0 +1,100 @@
+
+1-D t-J Eigenproblem, n=12
+
+ start: 0 end: 12 
+ HAMILTONIEN t-J
+ Le nombre de trou est :            1
+ Famille 1 :  F
+  
+  
+ LECTURE DES ATOMES, DES LIAISONS, DES INTEGRALES
+  
+  
+ ================ CLUSTER           1 ==================
+  
+ Liaisons entre les atomes           4
+ Les atomes            1  et            2  forment la liaison           1 qui est de type           1
+ Les atomes            2  et            3  forment la liaison           2 qui est de type           1
+ Les atomes            3  et            4  forment la liaison           3 qui est de type           1
+ Les atomes            1  et            4  forment la liaison           4 qui est de type           1
+ =============================================
+ Le nombre total d atomes est            4
+ =============================================
+ Nombre de J differents           3
+ type de liaison           1           1
+ type de liaison           2           1
+ type de liaison           3           1
+ type de liaison           4           1
+ type de J   1.0000000000000000     
+ type de J  -1.0000000000000000     
+ type de J   0.0000000000000000     
+ Parametres : Jz           1 =   1.0000000000000000     
+ Parametres : Jxy           1 =   1.0000000000000000     
+ Parametre : t           1 =  -1.0000000000000000     
+ Parametres : Jz           2 =   1.0000000000000000     
+ Parametres : Jxy           2 =   1.0000000000000000     
+ Parametre : t           2 =  -1.0000000000000000     
+ Parametres : Jz           3 =   1.0000000000000000     
+ Parametres : Jxy           3 =   1.0000000000000000     
+ Parametre : t           3 =  -1.0000000000000000     
+ Parametres : Jz           4 =   1.0000000000000000     
+ Parametres : Jxy           4 =   1.0000000000000000     
+ Parametre : t           4 =  -1.0000000000000000     
+ coucoudslect3
+ coucou
+ Parametres pour le t-J
+ xj1 =    1.0000000000000000E-002
+ xj2 =    0.0000000000000000     
+ xt1 =  -0.20000000000000001     
+ xt2 =    0.0000000000000000     
+ xv1 =    0.0000000000000000     
+ xv2 =    0.0000000000000000     
+ xv3 =    0.0000000000000000     
+ xbj =    0.0000000000000000     
+ xbt =    0.0000000000000000     
+ xeneparJ =    0.0000000000000000     
+ xeneperpJ =    0.0000000000000000     
+ xeneparT =    0.0000000000000000     
+ xeneperpT =    0.0000000000000000     
+ xenediagJ =    0.0000000000000000     
+ xenediagT =    0.0000000000000000     
+ xspar =   -0.0000000000000000     
+ xsperp =   -0.0000000000000000     
+ Le systeme comporte            0  plaquettes.
+ Spin total           0
+ Nombre de vecteurs demande           8
+ Nombre maximal d iterations de Davidson         280
+ Vecteur calcule le plus bas           1
+ Variable Nes4 (vecteurs d essai)           0
+ Nombre de determinants en donnees         100
+ Variable Ysuiv (suivre le vecteur initial) F
+ Seuil au dela duquel seront ecrits les vecteurs   9.9999999392252903E-009
+ Option d ecriture des determinants sur FIL2 T
+ =======nombre de centres de spin alpha=====           2
+ nt2=                    3
+ nt1                    4
+ nt2=                    3 nbeta=           1
+ Time used to build the matrix: 0.007798
+time = 0.007798 mpiid = 0 
+ Time used to assemble the matrix: 0.000026
+ Time used: 0.000336
+ Number of iterations of the method: 1
+ Solution method: krylovschur
+
+ Number of converged eigenvalues: 12
+ Stopping condition: tol=1e-09, maxit=10000000
+               k          ||Ax-kx||/||kx||         <S>
+       ----------------- ----------------- ------------------
+            -1.000000      8.49044e-16           0.500000           0.000000           0.000000           1.000000
+            -1.000000      9.30854e-16           0.500000           0.000000           0.000000           1.000000
+            -1.000000      2.25866e-15           0.500000           0.000000           0.000000           1.000000
+             1.000000      1.44702e-15           0.510159           0.000000           0.000000           1.000000
+             1.000000      1.19807e-15           0.605082           0.000000           0.000000           1.000000
+             1.000000      6.83261e-16           1.438653           0.000000           0.000000           1.000000
+             3.000000      7.89504e-16           0.822335           0.000000           0.000000           1.000000
+             3.000000      5.25436e-16           1.007741           0.000000           0.000000           1.000000
+             3.000000        9.298e-17           1.374264           0.000000           0.000000           1.000000
+             3.000000      1.62369e-16           0.876840           0.000000           0.000000           1.000000
+             3.000000      2.12039e-16           0.752834           0.000000           0.000000           1.000000
+             5.000000      4.04585e-16           1.500000           0.000000           0.000000           1.000000
+
