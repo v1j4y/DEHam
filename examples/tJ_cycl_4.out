@@ -74,10 +74,10 @@
  nt2=                    3
  nt1                    4
  nt2=                    3 nbeta=           1
- Time used to build the matrix: 0.007798
-time = 0.007798 mpiid = 0 
- Time used to assemble the matrix: 0.000026
- Time used: 0.000336
+ Time used to build the matrix: 0.009882
+time = 0.009882 mpiid = 0 
+ Time used to assemble the matrix: 0.000258
+ Time used: 0.004857
  Number of iterations of the method: 1
  Solution method: krylovschur
 

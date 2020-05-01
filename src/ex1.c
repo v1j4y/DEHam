@@ -35,20 +35,24 @@ int main(int argc,char **argv)
   PetscLogDouble t1,t2,tt1,tt2;
   PetscErrorCode ierr;
   int            mpiid;
+  SlepcInitialize(&argc,&argv,(char*)0,NULL);
+  MPI_Comm_rank(MPI_COMM_WORLD,&mpiid);
 
   char const* const fileName = argv[1];
   FILE* file = fopen(fileName, "r");
   Data getdata;
-  PetscInt		 nlocal;
+//PetscInt		 nlocal;
   
   /* gather the input data */
+  if(mpiid==0)printf("Reading data\n");
   Data_new(file, &getdata);
   getdata.n = get_ntot(getdata.FAM1, getdata.natom, getdata.isz, getdata.ntrou, getdata.fix_trou1, getdata.fix_trou2);
+  if(mpiid==0)printf("Done reading data\n");
 
-  nlocal = getdata.n/getdata.npar;
+//nlocal = getdata.n/getdata.npar;
 
   PetscScalar	 *valxr;
-  PetscInt	   	 indxr[nlocal];
+//PetscInt	   	 indxr[nlocal];
   char           filename[PETSC_MAX_PATH_LEN]="FIL666";
   PetscViewer    viewer;
   PetscBool      ishermitian;
@@ -77,7 +81,7 @@ int main(int argc,char **argv)
   PetscReal      trace2rdm=0.0;
   PetscReal      trace2rdmfin=0.0;
   IS                from, to; /* index sets that define the scatter */
-  PetscInt          idx_to[nlocal], idx_from[nlocal];
+//PetscInt          idx_to[nlocal], idx_from[nlocal];
   PetscScalar       *values;
   int 		   	 ndim=(getdata.natom/2)*((getdata.natom/2)-1)/2;
   double            a, b, c;
@@ -85,16 +89,16 @@ int main(int argc,char **argv)
   double            gamma_pfin = 0.0, gamma_mfin = 0.0;
   double            nel, s2dens;
   double            nelfin, s2densfin;
-  double            densmat2[getdata.natom][getdata.natom][getdata.natom][getdata.natom];
-  memset(densmat2, 0, sizeof(densmat2));
+//double            densmat2[getdata.natom][getdata.natom][getdata.natom][getdata.natom];
+//memset(densmat2, 0, sizeof(densmat2));
 
-  SlepcInitialize(&argc,&argv,(char*)0,NULL);
+  if(mpiid==0)printf("Initializing Slepc vars\n");
   ierr = PetscPrintf(PETSC_COMM_WORLD,"\n1-D t-J Eigenproblem, n=%D\n\n",getdata.n);CHKERRQ(ierr);
   ierr = MatCreate(PETSC_COMM_WORLD,&A);CHKERRQ(ierr);
   ierr = MatCreateAIJ(PETSC_COMM_WORLD,PETSC_DECIDE,PETSC_DECIDE,getdata.n,getdata.n,10*getdata.natom,NULL,10*getdata.natom,NULL,&A);CHKERRQ(ierr);
   ierr = MatMPIAIJSetPreallocation(A,10*getdata.natom,NULL,10*getdata.natom,NULL);CHKERRQ(ierr);
+  if(mpiid==0)printf("Done Initializing Slepc\n");
 
-  MPI_Comm_rank(MPI_COMM_WORLD,&mpiid);
   ierr = MatGetOwnershipRange(A,&Istart,&Iend);CHKERRQ(ierr);
   ierr = PetscTime(&tt1);CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD," start: %d end: %d \n",Istart, Iend);CHKERRQ(ierr);
