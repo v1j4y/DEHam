@@ -7,6 +7,24 @@ Double Exchange Hamiltonian: Complete Version
 
 (under GNU GENERAL PUBLIC LICENSE v2)
 
+This program can perform Exact diagonalization calculations of various types of
+model Hamiltonians. It is especially optimized for the t-J (or Double Exchange)
+type model Hamiltonians. The core feature which the program is specialized for
+is the adressing of determinant in an efficient manner to quickly construct the
+Hamiltonian non-zero matrix-elements. Once the Hamiltonian is constructed in 
+its sparse format, it is stored in distributed memory for all linear algebra
+operations.
+
+The main work of diagonalizing the Hamiltonian is performed using PETSc and
+SLEPc helper functions. These functions return the eigenvectors which are 
+not stored to disk by default due to their large size. 
+
+This project also contains subroutines which analyze the wavefunction in 
+its distributed memory form and calculates the various observables. The
+output of the program are the energies and the various observables such as 
+the total Spin, various Spin-Spin correlation functions, and one-and two-body
+density matrices.
+
 _Dependencies_
 ---------------
 
