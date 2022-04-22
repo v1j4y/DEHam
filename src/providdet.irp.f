@@ -36,6 +36,10 @@ BEGIN_PROVIDER[integer(C_SIZE_T),det,(nt2,2)]
                 endif
                 deth(count,2)=i-1
             enddo
+    else
+      count+=1
+      deth(count,1)=0
+      deth(count,2)=1
     endif
 
     !C if det=0 then exit
