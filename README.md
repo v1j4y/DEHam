@@ -66,14 +66,14 @@ _Using DEHam_
 140   # The largest number of non-zero elements per row (Multiple of Ndet)
 1     # The total number of processors used in parallel (Multiple of Ndet)
 1     # The number of holes
-0     # The isz (nalpha-nbeta-1) (odd spins) value or (nalpha-nbeta) (even spins) 
+0     # The Sz (nalpha-nbeta-1) (odd spins) value or (nalpha-nbeta) (even spins) 
 true     # Restrict the hole to the 1'st (i.e. half of natom) Family of states. *false* for no restrictions
 1,2,3,1,2,3,4,5,6,7	# The topology of the system is specified here
 2,3,4,8,7,6,5,6,7,8	# first and second line contain the two sites linked
-1,1,1,2,2,2,2,3,3,3	# third line contains the type of link (1 for t or J, 2 for K and 3 for none)
-.1430,-0.20,0.0000	# The three types of links this line gives J, K
-.1430,-0.20,0.0000	# 
--1.00,0.0,0.00		# This line gives t
+1,1,1,2,2,2,2,3,3,3	# third line contains the type of link (1 for t or J, 2 for K and 3 for J in the second family of states)
+.1430,-0.20,0.0000	# The three types of links this line gives J, K, J2 along x axis
+.1430,-0.20,0.0000	# The three types of links this line gives J, K, J2 along y axis
+-1.00,0.0,0.00		  # This line gives t
 0.,0.,0.,0.,0.,0.,0.,0.,0. # Energy of each orbital + one extra term
 2                   # The total number of roots
 1                   # I   The position of the first
