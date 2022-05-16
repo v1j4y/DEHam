@@ -32,7 +32,9 @@ void Data_new(FILE* file, Data* dat) {
 					dat->isz=atol(line);
 					break;
 				case 6:
-					dat->FAM1 = to_bool(line);
+					//dat->FAM1 = to_bool(line);
+          dat->FAM1 = 0;
+          dat->FAM1 = line && strcmp(line,"true")==0;
 					break;
 				case 7:
 					arrayIdx=0;
@@ -115,7 +117,7 @@ void Data_new(FILE* file, Data* dat) {
 					  /**
 					   * Convert the next token to a float value
 					   */
-					  val = strtof(token, &unconverted);
+					  val = strtod(token, &unconverted);
 					  if (!isspace(*unconverted) && *unconverted != 0)
 					  {
 					    /**
@@ -139,7 +141,7 @@ void Data_new(FILE* file, Data* dat) {
 					  /**
 					   * Convert the next token to a float value
 					   */
-					  val = strtof(token, &unconverted);
+					  val = strtod(token, &unconverted);
 					  if (!isspace(*unconverted) && *unconverted != 0)
 					  {
 					    /**
@@ -163,7 +165,7 @@ void Data_new(FILE* file, Data* dat) {
 					  /**
 					   * Convert the next token to a float value
 					   */
-					  val = strtof(token, &unconverted);
+					  val = strtod(token, &unconverted);
 					  if (!isspace(*unconverted) && *unconverted != 0)
 					  {
 					    /**
@@ -187,7 +189,7 @@ void Data_new(FILE* file, Data* dat) {
 					  /**
 					   * Convert the next token to a float value
 					   */
-					  val = strtof(token, &unconverted);
+					  val = strtod(token, &unconverted);
 					  if (!isspace(*unconverted) && *unconverted != 0)
 					  {
 					    /**

@@ -195,7 +195,7 @@ int main(int argc,char **argv)
   /*
      Save eigenvectors, if  == ested
   */
-  EPSGetConverged(eps,&nconv);
+  ierr = EPSGetConverged(eps,&nconv);CHKERRQ(ierr);
   if (getdata.print_wf) {
     PetscViewerASCIIOpen(PETSC_COMM_WORLD,filename,&viewer);
   	PetscViewerSetFormat(viewer,PETSC_VIEWER_ASCII_MATLAB);

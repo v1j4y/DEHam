@@ -3,7 +3,7 @@
         implicit none
 
         integer :: i
-        real*8  :: xmatd
+        real*8,intent(inout)  :: xmatd
         logical :: yw
 
 !       write(6,*)'in elem_diag'
@@ -32,6 +32,7 @@
             if(deter(i).ne.3) xmatd = xmatd + E(i)
        enddo
        xmatd = xmatd - E(natom+1)
+       if(yw)write(6,*)'xmatd=',xmatd
 
 !-----stockage de l element diag
 

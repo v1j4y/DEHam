@@ -26,6 +26,7 @@
       count1=0
       count2=1
       tistart2=tistart
+      xmat=0.0d0
 
       do j=1,nrows
     
