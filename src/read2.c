@@ -1,5 +1,26 @@
 #include "read2.h"
 
+/* Compare two strings s1 and s2, assuming s1 is terminated
+ * by \n or a NULL, and s2 is terminated by a NULL. A match
+ * returns 1, a non-match returns 0.
+ */
+int
+strcmpst1nl (const char * s1, const char * s2)
+{
+  char s1c;
+  do
+    {
+      s1c = *s1;
+      if (s1c == '\n')
+          s1c = 0;
+      if (s1c != *s2)
+          return 0;
+      s1++;
+      s2++;
+    } while (s1c); /* already checked *s2 is equal */
+  return 1;
+}
+
 void Data_new(FILE* file, Data* dat) { 
 
 //ata* dat = (Data*)malloc(sizeof(Data));
@@ -34,7 +55,8 @@ void Data_new(FILE* file, Data* dat) {
 				case 6:
 					//dat->FAM1 = to_bool(line);
           dat->FAM1 = 0;
-          dat->FAM1 = line && strcmp(line,"true")==0;
+          //dat->FAM1 = line && strcmp(line,"true")==0;
+          dat->FAM1 = strcmpst1nl(line,"true");
 					break;
 				case 7:
 					arrayIdx=0;
