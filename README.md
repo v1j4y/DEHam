@@ -108,7 +108,7 @@ t-J Hamiltonians.
 ![](https://raw.githubusercontent.com/v1j4y/DEHam/master/notebooks/graph.png)
 
 
-_Publications using this code please cite the following publication_
+_Research using this code please cite the following publication_
 -------------------------------
 
   1. High-Spin Chains and Crowns from Double-Exchange Mechanism [doi:10.3390/cryst6040039](http://www.dx.doi.org/10.3390/cryst6040039)
