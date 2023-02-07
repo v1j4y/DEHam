@@ -34,7 +34,9 @@ typedef struct {
 	int s23a2;
 	int s23b1;
 	int s23b2;
-	int postrou;
+	int postrou1;
+	int postrou2;
+	int postrou3;
 	long int fix_trou1;
 	long int fix_trou2;
     long int print_wf;

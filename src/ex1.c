@@ -5,6 +5,7 @@
 #include "stimsyr.h"
 #include "get_s2.h"
 #include "get_ntot.h"
+#include "get_proj.h"
 
 #undef __FUNCT__
 #define __FUNCT__ "main"
@@ -84,13 +85,18 @@ int main(int argc,char **argv)
 //PetscInt          idx_to[nlocal], idx_from[nlocal];
   PetscScalar       *values;
   int 		   	 ndim=(getdata.natom/2)*((getdata.natom/2)-1)/2;
+  int 		   	 ndimdmat2=(getdata.natom)*(getdata.natom)*(getdata.natom)*(getdata.natom);
   double            a, b, c;
   double            gamma_p = 0.0, gamma_m = 0.0;
   double            gamma_pfin = 0.0, gamma_mfin = 0.0;
   double            nel, s2dens;
   double            nelfin, s2densfin;
-//double            densmat2[getdata.natom][getdata.natom][getdata.natom][getdata.natom];
-//memset(densmat2, 0, sizeof(densmat2));
+  int               nstates = getdata.ntrou*3;
+  double            projvec[getdata.nroots*nstates], weightproj=0.0;
+  //double            densmat2[getdata.natom][getdata.natom][getdata.natom][getdata.natom];
+  ////double            *densmat2;
+  ////densmat2 = (double *)malloc(sizeof(double)*ndimdmat2);
+  //memset(densmat2, 0, sizeof(double)*ndimdmat2);
 
   if(mpiid==0)printf("Initializing Slepc vars\n");
   ierr = PetscPrintf(PETSC_COMM_WORLD,"\n1-D t-J Eigenproblem, n=%D\n\n",getdata.n);CHKERRQ(ierr);
@@ -250,13 +256,17 @@ int main(int argc,char **argv)
           get_s2(xr, &Istart, &Iend, values, &getdata.natom, &norm, &norm2, &norm3, &norm4, &xymat, &xymat2, &xymat3, &xymat4, &weight3,
                   &getdata.s21a1, &getdata.s21a2, &getdata.s21b1, &getdata.s21b2, &getdata.s22a1, &getdata.s22a2,
                   &getdata.s22b1, &getdata.s22b2,  &getdata.s23a1, &getdata.s23a2,
-                  &getdata.s23b1, &getdata.s23b2, &getdata.postrou, natomax);
+                  &getdata.s23b1, &getdata.s23b2, &getdata.postrou1, &getdata.postrou2, &getdata.postrou3, natomax);
 //        get_s2_cyclic(xr, &Istart, &Iend, values, &getdata.natom, &norm, &norm2, &norm3, &norm4, &xymat, &xymat2, &xymat3, &xymat4,
 //                &getdata.s21a1, &getdata.s21a2, &getdata.s21b1, &getdata.s21b2, &getdata.s22a1, &getdata.s22a2,
 //                &getdata.s22b1, &getdata.s22b2,  &getdata.s23a1, &getdata.s23a2,
 //                &getdata.s23b1, &getdata.s23b2, &getdata.postrou, natomax);
-//        get_1rdm(values, &Istart, &Iend, &getdata.natom, &trace1rdm, natomax);
-//        get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, densmat2, natomax);
+          get_1rdm(values, &Istart, &Iend, &getdata.natom, &trace1rdm, natomax);
+          //get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, densmat2, natomax);
+          //get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, natomax);
+          get_proj(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
+          weightproj = 0.0;
+          for(ii=0;ii<6;++ii) weightproj += projvec[(i)*6 + ii]*projvec[(i)*6+ii];
 //        analyse_(valxr, (Iend-Istart), &Istart, &Iend, &xymat, &norm);
           VecRestoreArray(vec2,&values);
           ierr = VecRestoreArray(xr, &valxr);CHKERRQ(ierr);
@@ -269,7 +279,7 @@ int main(int argc,char **argv)
           MPI_Reduce(&norm2, &normfin2, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&norm3, &normfin3, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&norm4, &normfin4, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
-//        MPI_Reduce(&trace1rdm, &trace1rdmfin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
+          MPI_Reduce(&trace1rdm, &trace1rdmfin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
 //          printf("done calc densmat\n");
 //          for(ll=0;ll<getdata.natom/2;ll++){
 //              for(kk=0;kk<getdata.natom/2;kk++){
@@ -309,11 +319,11 @@ int main(int argc,char **argv)
 
           if(!mpiid){
             XS=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin/normfin)));
-//          XS2=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin2/normfin2)));
-//          XS3=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin3/normfin3)));
-            XS2=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin2)));
-            XS3=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin3)));
-            XS4=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin4/normfin4)));
+            XS2=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin2/normfin2)));
+            XS3=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin3/normfin3)));
+//          XS2=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin2)));
+//          XS3=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin3)));
+//          XS4=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin4)));
             XS4=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin4/normfin4)));
             W3=weight3fin/normfin2;
 //          W3=weight3fin;
@@ -337,7 +347,7 @@ int main(int argc,char **argv)
       if (im!=0.0) {
         ierr = PetscPrintf(PETSC_COMM_WORLD," %14f%+14fi %12g\n",(double)re,(double)im,(double)error);CHKERRQ(ierr);
       } else {
-        ierr = PetscPrintf(PETSC_COMM_WORLD,"   %18f     %12g %18f %18f %18f %18f\n",(double)re,(double)error,(double)XS,(double)XS2,(double)XS3, (double)W3);CHKERRQ(ierr);
+        ierr = PetscPrintf(PETSC_COMM_WORLD,"   %18f     %12g %18f %18f %18f %18f %18f %18f %18f %18f %18f %18f %18f\n",(double)re,(double)error,(double)XS,(double)XS2,(double)XS3, (double)XS4, (double)weightproj, (double)projvec[i*6 + 0], (double)projvec[i*6 + 1], (double)projvec[i*6 + 2], (double)projvec[i*6 + 3], (double)projvec[i*6 + 4], (double)projvec[i*6 + 5]);CHKERRQ(ierr);
       }
       VecScatterDestroy(&scatter);
       VecDestroy(&vec2); 
@@ -345,6 +355,7 @@ int main(int argc,char **argv)
     ierr = PetscPrintf(PETSC_COMM_WORLD,"\n");CHKERRQ(ierr);
   }
 
+  //free(densmat2);
   ierr = EPSDestroy(&eps);CHKERRQ(ierr);
   ierr = MatDestroy(&A);CHKERRQ(ierr);
   ierr = VecDestroy(&xr);CHKERRQ(ierr);

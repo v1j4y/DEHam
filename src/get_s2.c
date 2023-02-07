@@ -26,7 +26,7 @@ void get_s2(Vec xr, PetscInt *Istart, PetscInt *Iend, PetscScalar *valxr, int *n
         PetscReal *norm, PetscReal *norm2, PetscReal *norm3, PetscReal *norm4, 
         PetscReal *xymat, PetscReal *xymat2, PetscReal *xymat3, PetscReal *xymat4, PetscReal *weight3,
             int *s21a1, int *s21a2, int *s21b1,  int *s21b2,  int *s22a1,  int *s22a2,  
-            int *s22b1, int *s22b2, int *s23a1,  int *s23a2,  int *s23b1, int *s23b2, int *postrou, const int natomax){
+            int *s22b1, int *s22b2, int *s23a1,  int *s23a2,  int *s23b1, int *s23b2, int *postrou1, int *postrou2, int *postrou3, const int natomax){
   long int       iaa2, iaa;
   long int       iii;
   int			 ideter[natomax];
@@ -91,9 +91,9 @@ void get_s2(Vec xr, PetscInt *Istart, PetscInt *Iend, PetscScalar *valxr, int *n
                       pos3=kko;
                   }
               }
-              if(ntrouboit1==1 && pos1 == *postrou)okboit1=1;
-              if(ntrouboit2==1 && pos2 == *postrou)okboit2=1;
-              if(ntrouboit3==1 && pos3 == *postrou)okboit3=1;
+              if(ntrouboit1==1 && pos1 == *postrou1)okboit1=1;
+              if(ntrouboit2==1 && pos2 == *postrou2)okboit2=1;
+              if(ntrouboit3==1 && pos3 == *postrou3)okboit3=1;
               if(okboit1){
                 *norm2=*norm2+valxr[iiii]*valxr[iiii];
               }
@@ -681,6 +681,6 @@ void get_s2(Vec xr, PetscInt *Istart, PetscInt *Iend, PetscScalar *valxr, int *n
 
   ierr = PetscTime(&tt2);
 //printf(" norm = %18f weight = %18f weight/N = %18f tmpwe = %18f\n", *norm2, *weight3, *weight3/(*norm2),tmpwe);
-//printf(" norm = %18f %18f xymat = %18f %18f | %d %d %d %d %d\n", *norm, *norm3, *xymat, *xymat3, *s22a1, *s22a2, *s22b1, *s22b2, *postrou);
+//printf(" norm = %18f %18f %18f %18f xymat = %18f %18f %18f %18f | %d %d %d %d %d\n", *norm, *norm2, *norm3, *norm4, *xymat, *xymat2, *xymat3, *xymat4, *s21a1, *s21a2, *s21b1, *s21b2, *postrou);
 //ierr = PetscPrintf(PETSC_COMM_WORLD," Time used for the s2 loop: %f\n",tt2-tt1);CHKERRQ(ierr);
 }

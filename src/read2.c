@@ -34,7 +34,7 @@ void Data_new(FILE* file, Data* dat) {
 	
 	    /* note that fgets doesn't strip the terminating \n, checking its
 	       presence would allow to handle lines longer than sizeof(line) */
-	  if (count != 30){
+	  if (count != 32){
 			count++;
 			switch(count){
 				case 1:
@@ -266,15 +266,21 @@ void Data_new(FILE* file, Data* dat) {
 					dat->s23b2=atol(line);
 					break;
                 case 27:
-					dat->postrou=atol(line);
+					dat->postrou1=atol(line);
 					break;
                 case 28:
-					dat->fix_trou1=atol(line);
+					dat->postrou2=atol(line);
 					break;
                 case 29:
+					dat->postrou3=atol(line);
+					break;
+                case 30:
+					dat->fix_trou1=atol(line);
+					break;
+                case 31:
 					dat->fix_trou2=atol(line);
 					break;
-				case 30:
+				case 32:
 					dat->print_wf = atol(line);
 					break;
                 default:

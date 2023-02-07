@@ -25,16 +25,19 @@
  */
 void get_1rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, PetscReal *trace1rdm, const int natomax){
 
-  long int			 ideter[natomax];
-  long int			 ideter2[natomax];
+  int			 ideter[natomax];
+  int			 ideter2[natomax];
   int 		   	 kko,kok,kkio;
   long int       ii;
   PetscInt      iiii;
   long int       iii;
   long int       iaa2, iaa;
-  int 		   	 ndim=(*natom)*(*natom)/8-(*natom)/2;
+  //int 		   	 ndim=(*natom)*(*natom)/8-(*natom)/2;
+  int 		   	 ndim=(*natom)/2;
   double            densmat[ndim][ndim];
   memset(densmat, 0, sizeof(densmat[0][0]) * ndim * ndim);
+  memset(ideter , 0, sizeof(ideter[0] ) * natomax);
+  memset(ideter2, 0, sizeof(ideter2[0]) * natomax);
 
             for(kko=0;kko<(*natom/2);kko++){
               for(kok=0;kok<(*natom/2);kok++){
@@ -54,17 +57,23 @@ void get_1rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, 
                           densmat[kko][kok]=densmat[kko][kok]+valxr[iiii]*valxr[iaa2];
                         }
                       }
-                      if(kko == kok && ideter[kko] != 3){
+                      if(kko == kok && ideter[kko] != 3l){
                         densmat[kko][kko]=densmat[kko][kko]+valxr[iiii]*valxr[iiii];
                       }
 
                   }
+
                   if(kko == kok){
                       *trace1rdm+=densmat[kko][kko];
                   }
 
               }
             }
+            //printf("\nDensmat 1body\n");
+            //for(kko=0;kko<(*natom/2);kko++){
+            //    printf(" %4.4f ", densmat[kko][kko]);
+            //}
+            //printf("\n");
 } /** END **/
 
 /*
@@ -81,10 +90,11 @@ void get_1rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, 
  * =====
  * trace    = trace
  */
-void get_2rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, PetscReal *trace2rdm, double densmat2[*natom][*natom][*natom][*natom], const int natomax){
+//void get_2rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, PetscReal *trace2rdm, double densmat2[*natom][*natom][*natom][*natom], const int natomax){
+void get_2rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, PetscReal *trace2rdm, const int natomax){
 
-  long int			 ideter[natomax];
-  long int			 ideter2[natomax];
+  int			 ideter[natomax];
+  int			 ideter2[natomax];
   int 		   	 kko,kok,kkio;
   int 		   	 mmo,mom,mmio;
   long int       ii;
@@ -92,6 +102,12 @@ void get_2rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, 
   long int       iii;
   long int       iaa2, iaa;
   long int       nrow=-1, ncol=-1;
+  int 		   	 ndimdmat2=(*natom)*(*natom)*(*natom)*(*natom)/16;
+  double            dmat2=0.0;
+  double            densmat2[*natom/2][*natom/2][*natom/2][*natom/2];
+  //double            *densmat2;
+  //densmat2 = (double *)malloc(sizeof(double)*ndimdmat2);
+  memset(densmat2, 0, sizeof(double)*ndimdmat2);
 //int 		   	 ndim=(*natom/2)*((*natom/2)-1)/2;
 //double            densmat2[ndim][ndim];
 //memset(densmat2, 0, sizeof(densmat2[0][0]) * ndim * ndim);
@@ -119,21 +135,28 @@ void get_2rdm(PetscScalar *valxr, PetscInt *Istart, PetscInt *Iend, int *natom, 
                           ideter2[kok]=ideter[mom];
                           ideter2[mom]=3;
                           adr_(ideter2, &iaa2);
-                          densmat2[kko][kok][mmo][mom]=densmat2[kko][kok][mmo][mom]+valxr[iiii]*valxr[iaa2];
+                          //densmat2[kko][kok][mmo][mom]=densmat2[kko][kok][mmo][mom]+valxr[iiii]*valxr[iaa2];
                        }
 
 
                      if(kko == mmo && kok == mom && ideter[kko]==3 && ideter[kok]==3 && kko != kok){
-                       densmat2[kko][kok][mmo][mom]=densmat2[kko][kok][mmo][mom]+valxr[iiii]*valxr[iiii];
+                       //densmat2[kko][kok][mmo][mom]=densmat2[kko][kok][mmo][mom]+valxr[iiii]*valxr[iiii];
+                     }
+                     if(kko == mmo && kok == mom && ideter[kko]==3 && ideter[kok]==3){
+                       dmat2 += valxr[iiii]*valxr[iiii];
                      }
 
                    }
-                          printf("%d\t%d\t%d\t%d\t%18f\n",kko,kok,mmo,mom,densmat2[kko][kok][mmo][mom]);
 
 
                     if(kko == mmo && kok == mom)*trace2rdm+=densmat2[kko][kok][mmo][mom];
+                    if(kko == mmo && kok == mom){
+                          printf("%d\t%d\t%d\t%d\t%18f\n",kko,mmo,kok,mom,dmat2);
+                          //printf("%d\t%d\t%d\t%d\t%18f\n",kko,mmo,kok,mom,densmat2[kko][kok][mmo][mom]);
+                    }
                  }
                }
+               dmat2=0.0;
 
 
               }
