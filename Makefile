@@ -45,7 +45,10 @@ ${OBJ_DIR}/get_s2_mov.o: ${SRC_DIR}/get_s2_mov.c directories chkopts
 ${OBJ_DIR}/get_dmat.o: ${SRC_DIR}/get_dmat.c directories chkopts
 	${CC} ${SLEPC_INCLUDE} ${PETSC_CC_INCLUDES} -c -o  $@ $< ${SLEPC_EPS_LIB} 
 
-${OBJ_DIR}/get_proj.o: ${SRC_DIR}/get_proj.c directories chkopts
+${OBJ_DIR}/get_proj_9_3h.o: ${SRC_DIR}/get_proj_9_3h.c directories chkopts
+	${CC} ${SLEPC_INCLUDE} ${PETSC_CC_INCLUDES} -c -o  $@ $< ${SLEPC_EPS_LIB} 
+
+${OBJ_DIR}/get_proj_9_3h.o: ${SRC_DIR}/get_proj_9_3h.c directories chkopts
 	${CC} ${SLEPC_INCLUDE} ${PETSC_CC_INCLUDES} -c -o  $@ $< ${SLEPC_EPS_LIB} 
 
 ${OBJ_DIR}/get_val_iaa2.o: ${SRC_DIR}/get_val_iaa2.c directories chkopts
@@ -54,6 +57,6 @@ ${OBJ_DIR}/get_val_iaa2.o: ${SRC_DIR}/get_val_iaa2.c directories chkopts
 ${OBJ_DIR}/ex1.o: ${SRC_DIR}/ex1.c
 	-${CC} ${SLEPC_INCLUDE} ${PETSC_CC_INCLUDES} -c -o $@ $< ${SLEPC_EPS_LIB}
 
-${BIN_DIR}/ex1: ${OBJ_DIR}/get_ntot.o ${OBJ_DIR}/read2.o ${OBJ_DIR}/get_s2_mov.o ${OBJ_DIR}/get_s2_cyclic.o ${OBJ_DIR}/get_s2.o ${OBJ_DIR}/get_dmat.o ${OBJ_DIR}/get_proj.o ${OBJ_DIR}/get_val_iaa2.o ${LIB_DIR}/irpf90.a ${OBJ_DIR}/ex1.o ${SRC_DIR}/read2.h ${SRC_DIR}/get_ntot.h ${SRC_DIR}/stimsyr.h chkopts
-	    -${CLINKER} ${SLEPC_INCLUDE} ${PETSC_CC_INCLUDES} -o ${BIN_DIR}/ex1 ${OBJ_DIR}/ex1.o ${OBJ_DIR}/read2.o ${OBJ_DIR}/get_ntot.o ${OBJ_DIR}/get_s2.o ${OBJ_DIR}/get_s2_mov.o ${OBJ_DIR}/get_s2_cyclic.o ${OBJ_DIR}/get_dmat.o ${OBJ_DIR}/get_proj.o ${OBJ_DIR}/get_val_iaa2.o ${LIB_DIR}/irpf90.a ${SLEPC_EPS_LIB}
+${BIN_DIR}/ex1: ${OBJ_DIR}/get_ntot.o ${OBJ_DIR}/read2.o ${OBJ_DIR}/get_s2_mov.o ${OBJ_DIR}/get_s2_cyclic.o ${OBJ_DIR}/get_s2.o ${OBJ_DIR}/get_dmat.o ${OBJ_DIR}/get_proj_9_3h.o ${OBJ_DIR}/get_val_iaa2.o ${LIB_DIR}/irpf90.a ${OBJ_DIR}/ex1.o ${SRC_DIR}/read2.h ${SRC_DIR}/get_ntot.h ${SRC_DIR}/stimsyr.h chkopts
+	    -${CLINKER} ${SLEPC_INCLUDE} ${PETSC_CC_INCLUDES} -o ${BIN_DIR}/ex1 ${OBJ_DIR}/ex1.o ${OBJ_DIR}/read2.o ${OBJ_DIR}/get_ntot.o ${OBJ_DIR}/get_s2.o ${OBJ_DIR}/get_s2_mov.o ${OBJ_DIR}/get_s2_cyclic.o ${OBJ_DIR}/get_dmat.o ${OBJ_DIR}/get_proj_9_3h.o ${OBJ_DIR}/get_val_iaa2.o ${LIB_DIR}/irpf90.a ${SLEPC_EPS_LIB}
 #    ${RM} ex1.o read2.o

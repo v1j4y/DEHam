@@ -5,7 +5,8 @@
 #include "stimsyr.h"
 #include "get_s2.h"
 #include "get_ntot.h"
-#include "get_proj.h"
+//#include "get_proj.h"
+#include "get_proj_9_3h.h"
 
 #undef __FUNCT__
 #define __FUNCT__ "main"
@@ -264,7 +265,7 @@ int main(int argc,char **argv)
           get_1rdm(values, &Istart, &Iend, &getdata.natom, &trace1rdm, natomax);
           //get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, densmat2, natomax);
           //get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, natomax);
-          get_proj(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
+          get_proj_9_3h(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
           weightproj = 0.0;
           for(ii=0;ii<6;++ii) weightproj += projvec[(i)*6 + ii]*projvec[(i)*6+ii];
 //        analyse_(valxr, (Iend-Istart), &Istart, &Iend, &xymat, &norm);
