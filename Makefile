@@ -52,6 +52,6 @@ $(EXE): $(OBJ)
 test:
 	@echo ${SOURCES}
 	@echo ${HEADERS}
-	@echo ${OBJ}
-	@echo ${LDFLAGS}
+	#@echo ${OBJ}
+	#@echo ${LDFLAGS}
 
