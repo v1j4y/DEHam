@@ -6,7 +6,7 @@
 #include "get_s2.h"
 #include "get_ntot.h"
 //#include "get_proj.h"
-#include "get_proj_9_3h.h"
+//#include "get_proj_9_3h.h"
 
 #undef __FUNCT__
 #define __FUNCT__ "main"
@@ -262,10 +262,10 @@ int main(int argc,char **argv)
 //                &getdata.s21a1, &getdata.s21a2, &getdata.s21b1, &getdata.s21b2, &getdata.s22a1, &getdata.s22a2,
 //                &getdata.s22b1, &getdata.s22b2,  &getdata.s23a1, &getdata.s23a2,
 //                &getdata.s23b1, &getdata.s23b2, &getdata.postrou, natomax);
-          get_1rdm(values, &Istart, &Iend, &getdata.natom, &trace1rdm, natomax);
+          //get_1rdm(values, &Istart, &Iend, &getdata.natom, &trace1rdm, natomax);
           //get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, densmat2, natomax);
           //get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, natomax);
-          get_proj_9_3h(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
+          //get_proj_9_3h(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
           weightproj = 0.0;
           for(ii=0;ii<6;++ii) weightproj += projvec[(i)*6 + ii]*projvec[(i)*6+ii];
 //        analyse_(valxr, (Iend-Istart), &Istart, &Iend, &xymat, &norm);
