@@ -224,6 +224,7 @@ void Data_new(FILE* file, Data* dat) {
 					  {
 					    dat->E[arrayIdx++] = val;
 					  }
+					  dat->xrep = val;
 					}
 					break;
                 case 14:

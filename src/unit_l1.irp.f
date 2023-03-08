@@ -7,6 +7,7 @@
         txjjz ,                &
         txtt  ,                &
         tE    ,                &
+        txrep ,                &
         tcountcol,             &
         tntrou,                &
         tisz,                  &
@@ -26,7 +27,7 @@
         integer(C_SIZE_T),INTENT(INOUT)::tcol(maxlien)
         integer(C_SIZE_T),INTENT(INOUT),dimension(tnrows)::tcountcol
         integer(C_SIZE_T),INTENT(INOUT)::tl1(maxlien),tl2(maxlien),tktyp(maxlien)
-        real*8,INTENT(INOUT)::txtt(maxlien),txjjz(maxlien),txjjxy(maxlien), tE(maxlien)
+        real*8,INTENT(INOUT)::txtt(maxlien),txjjz(maxlien),txjjxy(maxlien), tE(maxlien), txrep
    
 		nrows = tnrows
 		provide nrows
@@ -39,6 +40,7 @@
         xjjz (i)   = txjjz (i)
         E (i)   = tE (i)
         enddo
+        xrep = txrep
         ntrou = tntrou
         isz = tisz
         FAM1 = tfam1

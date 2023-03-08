@@ -10,6 +10,7 @@ void unit_l1_(
             double *,
             double *,
             double *,
+            double *,
             long int *,
             long int *,
             long int *,

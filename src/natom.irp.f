@@ -285,6 +285,7 @@ BEGIN_PROVIDER [integer, natom]
 	        write(6,*)'xenediagT = ',xenediagT
 	        write(6,*)'xspar = ',xspar
 	        write(6,*)'xsperp = ',xsperp
+	        write(6,*)'xrep   = ',xrep
         endif
 !===================================================================
 !====================================================================

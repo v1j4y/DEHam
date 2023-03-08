@@ -6,7 +6,7 @@
 #include "get_s2.h"
 #include "get_ntot.h"
 //#include "get_proj.h"
-#include "get_proj_9_3h.h"
+//#include "get_proj_9_3h.h"
 
 #undef __FUNCT__
 #define __FUNCT__ "main"
@@ -43,6 +43,8 @@ int main(int argc,char **argv)
   char const* const fileName = argv[1];
   FILE* file = fopen(fileName, "r");
   Data getdata;
+  Data* getdatap = (Data*)malloc(sizeof(Data));
+  getdata = (*getdatap);
 //PetscInt		 nlocal;
   
   /* gather the input data */
@@ -126,6 +128,7 @@ int main(int argc,char **argv)
             getdata.xjjz ,
             getdata.xtt ,
             getdata.E ,
+            &getdata.xrep,
             tcountcol,
             &getdata.ntrou,
             &getdata.isz,
@@ -265,7 +268,7 @@ int main(int argc,char **argv)
           get_1rdm(values, &Istart, &Iend, &getdata.natom, &trace1rdm, natomax);
           //get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, densmat2, natomax);
           //get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, natomax);
-          get_proj_9_3h(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
+          //get_proj_9_3h(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
           weightproj = 0.0;
           for(ii=0;ii<6;++ii) weightproj += projvec[(i)*6 + ii]*projvec[(i)*6+ii];
 //        analyse_(valxr, (Iend-Istart), &Istart, &Iend, &xymat, &norm);

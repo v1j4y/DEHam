@@ -29,7 +29,13 @@
 !         endif
        enddo
        do i=1, natom
-            if(deter(i).ne.3) xmatd = xmatd + E(i)
+            if(deter(i).ne.3) then
+              xmatd = xmatd + E(i)
+            else
+              if(deter(i-1) .eq. 3)  then
+                xmatd = xmatd-xrep*xtt(1)
+              endif
+            endif
        enddo
        xmatd = xmatd - E(natom+1)
        if(yw)write(6,*)'xmatd=',xmatd
