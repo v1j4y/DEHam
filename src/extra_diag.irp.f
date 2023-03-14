@@ -122,6 +122,7 @@
               Touch deter
               call adr(deter,iaa)
               call elem_diag(xmat)
+!              write(6,*)'num det',i
               countcol+=1
 !             print *,"1->id=",iaa," val=",xmat*1.0d0
               col(countcol)=iaa

@@ -36,6 +36,7 @@
                 xmatd = xmatd-xrep*xtt(1)
               endif
             endif
+       write(6,*)i,deter(i)
        enddo
        xmatd = xmatd - E(natom+1)
        if(yw)write(6,*)'xmatd=',xmatd

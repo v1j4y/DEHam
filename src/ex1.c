@@ -118,6 +118,7 @@ int main(int argc,char **argv)
           tcountcol[kk]=0;
       }
       iii=i+1;
+      printf("%d) \n",i);
       unit_l1_(
             getdata.l1,
             getdata.l2,
@@ -147,6 +148,7 @@ int main(int argc,char **argv)
         for(kk=0;kk<tcountcol[ll]+1;kk++){
             value[kk] = val[kk+tcountcol2];
             col[kk] = tcol[kk+tcountcol2]-1;
+            if(mpiid==0)printf(" I=%d J=%d val=%10.15f\n",iii2, col[kk], value[kk]);
 //          printf("%d) kk=%d col=%d val=%1.4f\n",i,kk,col[kk],value[kk]);
         }
         for(kk=tcountcol2+tcountcol[ll]+1;kk<natomax;kk++){
