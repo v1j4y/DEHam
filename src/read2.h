@@ -20,6 +20,7 @@ typedef struct {
 	double	xjjxy[900]; 
 	double	xtt[900]; 
 	double  E[900]; 
+	double  xrep;
 	long int nroots;
 	int natom;
 	int s21a1;

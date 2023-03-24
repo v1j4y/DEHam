@@ -32,7 +32,14 @@
 !         endif
        enddo
        do i=1, natom
-            if(deter(i).ne.3) xmatd = xmatd + E(i)
+            if(deter(i).ne.3) then
+              xmatd = xmatd + E(i)
+            else
+              if(deter(i-1) .eq. 3)  then
+                xmatd = xmatd-xrep*xtt(1)
+              endif
+            endif
+       write(6,*)i,deter(i)
        enddo
        do i=1, natom-1
           if(deter(i).eq.3 .and. deter(i+1).eq.3) xmatd = xmatd - xrep*xtt(1)

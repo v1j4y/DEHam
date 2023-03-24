@@ -39,6 +39,7 @@ ${LIB_DIR}/irpf90.a: directories
 	cd ${SRC_DIR} && irpf90 init && $(MAKE) && cp IRPF90_temp/irpf90.a ../${LIB_DIR}
 
 
+
 all: CPPFLAGS += -DNDEBUG
 all: $(EXE)
 
@@ -47,6 +48,7 @@ $(EXE): $(OBJ)
 	$(CLINKER) $(LDFLAGS) $^ $(LDLIBS) -o $@ 
 	@echo "Linking complete!"
 
+
 -include $(DEP)
 
 test:
@@ -54,4 +56,5 @@ test:
 	@echo ${HEADERS}
 	#@echo ${OBJ}
 	#@echo ${LDFLAGS}
+
 

@@ -9,6 +9,7 @@
 //#include "get_proj_9_3h.h"
 #include "get_proj_general.h"
 
+
 #undef __FUNCT__
 #define __FUNCT__ "main"
 
@@ -44,6 +45,8 @@ int main(int argc,char **argv)
   char const* const fileName = argv[1];
   FILE* file = fopen(fileName, "r");
   Data getdata;
+  Data* getdatap = (Data*)malloc(sizeof(Data));
+  getdata = (*getdatap);
 //PetscInt		 nlocal;
   
   /* gather the input data */
@@ -135,6 +138,7 @@ int main(int argc,char **argv)
           tcountcol[kk]=0;
       }
       iii=i+1;
+      printf("%d) \n",i);
       unit_l1_(
             getdata.l1,
             getdata.l2,
@@ -145,6 +149,7 @@ int main(int argc,char **argv)
             getdata.xjjz ,
             getdata.xtt ,
             getdata.E ,
+            &getdata.xrep,
             tcountcol,
             &getdata.ntrou,
             &getdata.isz,
@@ -159,10 +164,12 @@ int main(int argc,char **argv)
 //    }
       for(ll=0;ll<getdata.nnz;ll++){
 
+        iii2=i+ll;
 //      printf("%d) ll=%d countcol=%d\n",i,ll,tcountcol[ll]+1);
         for(kk=0;kk<tcountcol[ll]+1;kk++){
             value[kk] = val[kk+tcountcol2];
             col[kk] = tcol[kk+tcountcol2]-1;
+            if(mpiid==0)printf(" I=%d J=%d val=%10.15f\n",iii2, col[kk], value[kk]);
 //          printf("%d) kk=%d col=%d val=%1.4f\n",i,kk,col[kk],value[kk]);
         }
         for(kk=tcountcol2+tcountcol[ll]+1;kk<natomax;kk++){
@@ -171,7 +178,6 @@ int main(int argc,char **argv)
         }
         tcountcol2=tcountcol2 + tcountcol[ll]+1;
         countcol=tcountcol[ll]+1;
-        iii2=i+ll;
         ierr = MatSetValues(A,1,&iii2,countcol,col,value,INSERT_VALUES);CHKERRQ(ierr);
       }
   }
@@ -287,6 +293,7 @@ int main(int argc,char **argv)
           //get_proj_9_3h(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
           //get_proj(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
           get_proj_general(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax,getdata.ntrou,nalpha,getdata.ntrou);
+
 //        analyse_(valxr, (Iend-Istart), &Istart, &Iend, &xymat, &norm);
           VecRestoreArray(vec2,&values);
           ierr = VecRestoreArray(xr, &valxr);CHKERRQ(ierr);

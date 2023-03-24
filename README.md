@@ -72,19 +72,19 @@ true     # Restrict the hole to the 1'st (i.e. half of natom) Family of states. 
 .1430,-0.20,0.0000	# The three types of links this line gives J, K, J2 along x axis
 .1430,-0.20,0.0000	# The three types of links this line gives J, K, J2 along y axis
 -1.00,0.0,0.00		  # This line gives t
-0.,0.,0.,0.,0.,0.,0.,0.,0. # Energy of each orbital + one extra term
+0.,0.,0.,0.,0.,0.,0.,0.,0. # Energy of each orbital + *one extra term*
 2                   # The total number of roots
-1                   # I   The position of the first
-1                   # I   SBox
-1                   # I
-1                   # I
+1                   # I a1   The position of the first 
+1                   # I a2   SBox (starts from 0 )
+1                   # I b1
+1                   # I b2
 1                   # II  The positions of the second
-1                   # II  SBox
-1                   # II
+1                   # II  SBox (starts from 0)
+1                   # II 
 1                   # II
 1                   # III
 1                   # III The positions of the third
-1                   # III SBox
+1                   # III SBox (starts from 0)
 1                   # III
 1                   # positio of the hole
 0                   # fix the position of the first hole during the CI
@@ -108,7 +108,7 @@ t-J Hamiltonians.
 ![](https://raw.githubusercontent.com/v1j4y/DEHam/master/notebooks/graph.png)
 
 
-_Publications using this code_
+_Research using this code please cite the following publication_
 -------------------------------
 
   1. High-Spin Chains and Crowns from Double-Exchange Mechanism [doi:10.3390/cryst6040039](http://www.dx.doi.org/10.3390/cryst6040039)
