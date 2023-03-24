@@ -23,8 +23,8 @@ strcmpst1nl (const char * s1, const char * s2)
 
 void Data_new(FILE* file, Data* dat) { 
 
-//ata* dat = (Data*)malloc(sizeof(Data));
-    char line[256];
+  //Data* dat = (Data*)malloc(sizeof(Data));
+  char line[256];
 	char *token;
 	const char *delim=",";
 	size_t arrayIdx=0;

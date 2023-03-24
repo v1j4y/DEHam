@@ -93,12 +93,30 @@ int main(int argc,char **argv)
   double            gamma_pfin = 0.0, gamma_mfin = 0.0;
   double            nel, s2dens;
   double            nelfin, s2densfin;
-  int               nstates = getdata.ntrou*3;
+  int               nalpha,nbeta;
+  if((getdata.natom-getdata.ntrou+2*getdata.isz)%2 == 0){
+      nalpha=(getdata.natom-getdata.ntrou+2*getdata.isz)/2;
+      nbeta=(getdata.natom -getdata.ntrou-2*getdata.isz)/2;
+      if(((getdata.natom-getdata.ntrou)/2)==getdata.isz){
+          nbeta=0;
+      }
+  }
+  else{
+      nalpha=(getdata.natom-getdata.ntrou+2*getdata.isz+1)/2;
+      nbeta=(getdata.natom -getdata.ntrou-2*getdata.isz-1)/2;
+      if(((getdata.natom-getdata.ntrou+1)/2)==getdata.isz){
+          nbeta=0;
+      }
+  }
+//    = (getdata.natom - getdata.ntrou + 2*getdata.isz)/2;
+  int               nstates = get_nstates(getdata.ntrou,nalpha);
   double            projvec[getdata.nroots*nstates], weightproj=0.0;
+  double            projvecfin[getdata.nroots*nstates];
   //double            densmat2[getdata.natom][getdata.natom][getdata.natom][getdata.natom];
   ////double            *densmat2;
   ////densmat2 = (double *)malloc(sizeof(double)*ndimdmat2);
   //memset(densmat2, 0, sizeof(double)*ndimdmat2);
+  printf(" nstates=%d nalpha=%d \n",nstates, nalpha);
 
   if(mpiid==0)printf("Initializing Slepc vars\n");
   ierr = PetscPrintf(PETSC_COMM_WORLD,"\n1-D t-J Eigenproblem, n=%D\n\n",getdata.n);CHKERRQ(ierr);
@@ -267,9 +285,8 @@ int main(int argc,char **argv)
           //get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, densmat2, natomax);
           //get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, natomax);
           //get_proj_9_3h(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
-          get_proj_general(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax,3,10,3);
-          weightproj = 0.0;
-          for(ii=0;ii<6;++ii) weightproj += projvec[(i)*6 + ii]*projvec[(i)*6+ii];
+          //get_proj(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
+          get_proj_general(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax,getdata.ntrou,nalpha,getdata.ntrou);
 //        analyse_(valxr, (Iend-Istart), &Istart, &Iend, &xymat, &norm);
           VecRestoreArray(vec2,&values);
           ierr = VecRestoreArray(xr, &valxr);CHKERRQ(ierr);
@@ -283,6 +300,13 @@ int main(int argc,char **argv)
           MPI_Reduce(&norm3, &normfin3, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&norm4, &normfin4, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&trace1rdm, &trace1rdmfin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
+          MPI_Reduce(&projvec, &projvecfin, getdata.nroots*nstates, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
+          weightproj = 0.0;
+          if(mpiid==0){
+          for(ii=0;ii<nstates;++ii) weightproj += projvecfin[(i)*nstates + ii]*projvecfin[(i)*nstates+ii];
+          //for(ii=0;ii<nstates;++ii)
+          //  printf("(here) %10.15f \n",projvecfin[(i)*nstates + ii]);
+          }
 //          printf("done calc densmat\n");
 //          for(ll=0;ll<getdata.natom/2;ll++){
 //              for(kk=0;kk<getdata.natom/2;kk++){
@@ -350,7 +374,15 @@ int main(int argc,char **argv)
       if (im!=0.0) {
         ierr = PetscPrintf(PETSC_COMM_WORLD," %14f%+14fi %12g\n",(double)re,(double)im,(double)error);CHKERRQ(ierr);
       } else {
-        ierr = PetscPrintf(PETSC_COMM_WORLD,"   %18f     %12g %18f %18f %18f %18f %18f %18f %18f %18f %18f %18f %18f\n",(double)re,(double)error,(double)XS,(double)XS2,(double)XS3, (double)XS4, (double)weightproj, (double)projvec[i*6 + 0], (double)projvec[i*6 + 1], (double)projvec[i*6 + 2], (double)projvec[i*6 + 3], (double)projvec[i*6 + 4], (double)projvec[i*6 + 5]);CHKERRQ(ierr);
+        //ierr = PetscPrintf(PETSC_COMM_WORLD,"   %18f     %12g %18f %18f %18f %18f %18f %18f %18f %18f %18f %18f %18f\n",(double)re,(double)error,(double)XS,(double)XS2,(double)XS3, (double)XS4, (double)weightproj);CHKERRQ(ierr);
+        ierr = PetscPrintf(PETSC_COMM_WORLD,"   %18f     %12g %18f %18f \n",(double)re,(double)error,(double)XS, (double)weightproj);CHKERRQ(ierr);
+        PetscPrintf(PETSC_COMM_WORLD,"----------------------------\n");
+        PetscPrintf(PETSC_COMM_WORLD,"Printing projection vectors \n");
+        PetscPrintf(PETSC_COMM_WORLD,"----------------------------\n");
+        for(ii=0;ii<nstates;++ii){
+          PetscPrintf(PETSC_COMM_WORLD,"%d %18f \n",ii,projvecfin[(i)*nstates + ii]);
+        }
+        PetscPrintf(PETSC_COMM_WORLD,"------     Done      -------\n");
       }
       VecScatterDestroy(&scatter);
       VecDestroy(&vec2); 

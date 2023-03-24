@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+#include <assert.h>
 
 #define SZE_MAX 8
 //#define MS 10
@@ -37,6 +39,28 @@ char *dictionary_get(struct Dictionary *d, char *key);
 // Free the memory used by the dictionary
 void dictionary_free(struct Dictionary *d);
 
+// Function to calculate outer product of two vectors
+// Input:
+//  a - Vecetor
+//  b - Vector
+//  m - Dim(a)
+//  n - Dim(b)
+void outerProduct(double a[], double b[], int m, int n, double matrix[][n]);
+
+// Function to flatten a matrix to an array
+// Input:
+//  rows   - rows of A
+//  rows   - rows of A
+//  matrix - Matrix A
+//  array  - Flattened array
+void flattenMatrix(int rows, int columns, double matrix[rows][columns], double array[rows * columns]);
+
+// Function to print array
+void printArray(double arr[], int size);
+
+// Function to print matrix
+void printMatrix(int row, int col, double matrix[][col]);
+
 // Function to convert base 6 to base 10
 int base6ToBase10(int n);
 
@@ -55,6 +79,13 @@ The array is passed as a parameter to the function.
 @return void
 */
 void storeDigits(int num, int arr[], int *sze);
+
+// Find dimension of model space
+int get_nstates(int sze, int ms);
+
+// Prepare the factors
+// for the spatial part i.e. the Hueckel factors
+int prepareHueckelFactors(int nsite, double *factor, int size);
 
 // Main function to prepare dictionary
 int prepare_dictionary(struct Dictionary *d, int sze, int ms);

@@ -2,8 +2,9 @@
 
         implicit none
 
-        integer :: i
+        integer :: i, j
         real*8,intent(inout)  :: xmatd
+        real*8           :: xrep
         logical :: yw
 
 !       write(6,*)'in elem_diag'
@@ -13,6 +14,8 @@
 
        yw=.FALSE.
        xmatd=0.d0
+       xrep = 0.00d0
+       !xrep = 1.25d0
 !      testing code
 !      xmatd=1000.d0
 !      if(.not.redo)write(6,*)'vijayyves'
@@ -30,6 +33,9 @@
        enddo
        do i=1, natom
             if(deter(i).ne.3) xmatd = xmatd + E(i)
+       enddo
+       do i=1, natom-1
+          if(deter(i).eq.3 .and. deter(i+1).eq.3) xmatd = xmatd - xrep*xtt(1)
        enddo
        xmatd = xmatd - E(natom+1)
        if(yw)write(6,*)'xmatd=',xmatd
