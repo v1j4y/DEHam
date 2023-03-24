@@ -144,6 +144,7 @@ int main(int argc,char **argv)
 //    }
       for(ll=0;ll<getdata.nnz;ll++){
 
+        iii2=i+ll;
 //      printf("%d) ll=%d countcol=%d\n",i,ll,tcountcol[ll]+1);
         for(kk=0;kk<tcountcol[ll]+1;kk++){
             value[kk] = val[kk+tcountcol2];
@@ -157,7 +158,6 @@ int main(int argc,char **argv)
         }
         tcountcol2=tcountcol2 + tcountcol[ll]+1;
         countcol=tcountcol[ll]+1;
-        iii2=i+ll;
         ierr = MatSetValues(A,1,&iii2,countcol,col,value,INSERT_VALUES);CHKERRQ(ierr);
       }
   }
