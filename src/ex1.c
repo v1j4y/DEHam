@@ -244,16 +244,26 @@ int main(int argc,char **argv)
    */
   int rowm, colm;
   if (mpiid == 0) {
-    const char *filename;
-    if(getdata.ntrou==2){
-      filename="dettocsf20.txt";
-    }
-    else if(getdata.ntrou==3){
-      filename="dettocsf30.txt";
-    }
-    else if(getdata.ntrou==4){
-      filename="dettocsf40.txt";
-    }
+    char filename[]="dettocsf";
+    int length = snprintf(NULL, 0,"%d",getdata.ntrou);
+    char sntrou[length + 1];
+    length = snprintf(NULL, 0,"%d",nalpha);
+    char snalpha[length + 1];
+    sprintf(sntrou,"%d",getdata.ntrou);
+    sprintf(snalpha,"%d",nalpha);
+    strcat(filename,sntrou);
+    strcat(filename,snalpha);
+    strcat(filename,".txt");
+    printf(" Filename = %s \n",filename);
+    //if(getdata.ntrou==2){
+    //  //filename="dettocsf20.txt";
+    //}
+    //else if(getdata.ntrou==3){
+    //  filename="dettocsf30.txt";
+    //}
+    //else if(getdata.ntrou==4){
+    //  filename="dettocsf40.txt";
+    //}
     FILE* file = fopen(filename, "r");
     fscanf(file, "%d", &rowm);
     fscanf(file, "%d", &colm);
@@ -267,16 +277,26 @@ int main(int argc,char **argv)
   //double projmatrix[rowm][colm];
   double *projmatrix;
   if (mpiid == 0) {
-    const char *filename;
-    if(getdata.ntrou==2){
-      filename="dettocsf20.txt";
-    }
-    else if(getdata.ntrou==3){
-      filename="dettocsf30.txt";
-    }
-    else if(getdata.ntrou==4){
-      filename="dettocsf40.txt";
-    }
+    //const char *filename;
+    //if(getdata.ntrou==2){
+    //  filename="dettocsf20.txt";
+    //}
+    //else if(getdata.ntrou==3){
+    //  filename="dettocsf30.txt";
+    //}
+    //else if(getdata.ntrou==4){
+    //  filename="dettocsf40.txt";
+    //}
+    char filename[]="dettocsf";
+    int length = snprintf(NULL, 0,"%d",getdata.ntrou);
+    char sntrou[length + 1];
+    length = snprintf(NULL, 0,"%d",nalpha);
+    char snalpha[length + 1];
+    sprintf(sntrou,"%d",getdata.ntrou);
+    sprintf(snalpha,"%d",nalpha);
+    strcat(filename,sntrou);
+    strcat(filename,snalpha);
+    strcat(filename,".txt");
     FILE* file = fopen(filename, "r");
     fscanf(file, "%d", &rowm);
     fscanf(file, "%d", &colm);
@@ -299,9 +319,9 @@ int main(int argc,char **argv)
           projfac = sqrt(projfac);
         }
         projmatrix[ik*colm + jk] = projfac;
-        printf("%8.4f ",projmatrix[ik*colm + jk]);
+        //printf("%8.4f ",projmatrix[ik*colm + jk]);
       }
-      printf("\n");
+      //printf("\n");
     }
   }
 

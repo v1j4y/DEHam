@@ -75,20 +75,56 @@ void get_proj_general(PetscScalar *valxr,
   if(fabs(XS-0.0) < 1E-10){
     idxprojm = 0;
   }
+  else if(fabs(XS-0.5) < 1E-10){
+    idxprojm = 0;
+  }
   else if(fabs(XS-1.0) < 1E-10){
+    idxprojm = 1;
+  }
+  else if(fabs(XS-1.5) < 1E-10){
     idxprojm = 1;
   }
   else if(fabs(XS-2.0) < 1E-10){
     idxprojm = 2;
   }
+  else if(fabs(XS-2.5) < 1E-10){
+    idxprojm = 2;
+  }
   else if(fabs(XS-3.0) < 1E-10){
+    idxprojm = 3;
+  }
+  else if(fabs(XS-3.5) < 1E-10){
     idxprojm = 3;
   }
   else if(fabs(XS-4.0) < 1E-10){
     idxprojm = 4;
   }
+  else if(fabs(XS-4.5) < 1E-10){
+    idxprojm = 4;
+  }
   else if(fabs(XS-5.0) < 1E-10){
     idxprojm = 5;
+  }
+  else if(fabs(XS-5.5) < 1E-10){
+    idxprojm = 5;
+  }
+  else if(fabs(XS-6.0) < 1E-10){
+    idxprojm = 6;
+  }
+  else if(fabs(XS-6.5) < 1E-10){
+    idxprojm = 6;
+  }
+  else if(fabs(XS-7.0) < 1E-10){
+    idxprojm = 7;
+  }
+  else if(fabs(XS-7.5) < 1E-10){
+    idxprojm = 7;
+  }
+  else if(fabs(XS-8.0) < 1E-10){
+    idxprojm = 8;
+  }
+  else if(fabs(XS-8.5) < 1E-10){
+    idxprojm = 8;
   }
 
   int sizefac = (int)pow(3,nholes);
