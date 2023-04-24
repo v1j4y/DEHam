@@ -12,7 +12,11 @@ void get_proj_general(PetscScalar *valxr,
                       int *natom, 
                       int iroot, 
                       double *projvec, 
+                      double *projvec2, 
                       const int natomax,
                       int sze,
                       int MS2,
-                      int nholes);
+                      int nholes,
+                      double XS,
+                      int colm,
+                      double *projmatrix);

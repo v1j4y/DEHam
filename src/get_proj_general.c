@@ -27,10 +27,14 @@ void get_proj_general(PetscScalar *valxr,
                       int *natom, 
                       int iroot, 
                       double *projvec, 
+                      double *projvec2, 
                       const int natomax,
                       int sze,
                       int MS2,
-                      int nholes){
+                      int nholes,
+                      double XS,
+                      int colm,
+                      double *projmatrix){
 
   int			 ideter[natomax];
   int			 ideter2[natomax];
@@ -47,7 +51,7 @@ void get_proj_general(PetscScalar *valxr,
   int sumMs=0;
   int ntrouGauch = 0;
   int ntrouDroit = 0;
-  int idx;
+  int idx, idxprojm;
   int checkIonic;
   int pow3 = (int)pow(3,nholes);
 
@@ -67,6 +71,25 @@ void get_proj_general(PetscScalar *valxr,
   //double normvec[dim];
   int ms[nholes];
   int idh[nholes];
+
+  if(fabs(XS-0.0) < 1E-10){
+    idxprojm = 0;
+  }
+  else if(fabs(XS-1.0) < 1E-10){
+    idxprojm = 1;
+  }
+  else if(fabs(XS-2.0) < 1E-10){
+    idxprojm = 2;
+  }
+  else if(fabs(XS-3.0) < 1E-10){
+    idxprojm = 3;
+  }
+  else if(fabs(XS-4.0) < 1E-10){
+    idxprojm = 4;
+  }
+  else if(fabs(XS-5.0) < 1E-10){
+    idxprojm = 5;
+  }
 
   int sizefac = (int)pow(3,nholes);
   double fachole[sizefac];
@@ -139,68 +162,15 @@ void get_proj_general(PetscScalar *valxr,
       int idspin = charPtrToInt(dictionary_get(dadr,intToCharPtr(addbase6)));
       double fhole  = fachole[idhole];
       double fspin  = 1.0/charPtrToInt(dictionary_get(d, intToCharPtr(addbase6)));
-      //projvecmat[idhole + idspin] += valxr[iiii]*fhole*fspin;
-      //projvecmat[idh[2]*3*3*idx + idh[1]*3*idx + idh[0]*idx + idspin] += valxr[iiii]*fhole*fspin;
-      //printf("ii=%d val=%10.15f idx=%d\n",ii,valxr[iiii],idhole*idx + idspin);
-      //projvecmat[idhole * idx + idspin] += valxr[iiii]*fhole*sqrt(fspin);
-      //printf(" %3.5f %3.5f (%3.5f): %s | %3.5f | %d %d\n",fhole,sqrt(fspin),fhole*sqrt(fspin)*fhole*sqrt(fspin),intToCharPtr(addbase6),valxr[iiii],idspin,idhole);
       projvec[(iroot)*idx + idspin] += valxr[iiii]*fhole*sqrt(fspin);
-      //if(addbase10==30){
-      //  //normproj += valxr[iiii]*fhole;
-      //  normproj += projvecmat[idhole * idx + idspin];
-      //  for(kko=0;kko<6;++kko){
-      //    printf(" %d ",ideter[kko]);
-      //  }
-      //  printf("\n");
-      //  for(kko=11;kko>5;--kko){
-      //    printf(" %d ",ideter[kko]);
-      //  }
-      //  printf("\n");
-      //}
-      //if(abs(valxr[iiii]) > 0.05) printf("- -- %3.5f\n",valxr[iiii]);
+      projvec2[(iroot)*idx + idspin] += valxr[iiii]*fhole*sqrt(fspin)*projmatrix[idxprojm * colm + idspin];
     }
   }
-  //printf("normproj=%3.5f\n",normproj);
-
-  // Sum over all hole positions
-  //for(kko=0;kko<idx;++kko){
-  //  for(ii=0;ii<nholes;++ii){
-  //    idh[0]=ii;
-  //    for(iii=0;iii<nholes;++iii){
-  //      idh[1]=iii;
-  //      //for(iiii=0;iiii<nholes;++iiii){
-  //        //idh[2]=iiii;
-  //        //int idhole = idh[0] * 1 + idh[1] * 3 + idh[2] * 9;
-  //        int idhole = idh[0] * 1 + idh[1] * 3;
-  //        //printf("%d %d %d idhole=%d val=%10.15f\n",idh[0],idh[1],idh[2],idhole,projvecmat[idhole*idx + kko]);
-  //        //projvec[(iroot)*idx + kko] += projvecmat[idhole*idx + kko]; 
-  //        if(kko==0){
-  //          normproj += projvecmat[idhole * idx + kko];
-  //        }
-  //      //}
-  //    }
-  //  }
+  //printf("idxprojm=%d XS=%6.4f \n",idxprojm,XS);
+  //for(int i=0;i<6;++i){
+  //  printf(" (%8.4f %8.4f ) ",projvec[(iroot)*idx + i],projmatrix[idxprojm * colm + i]);
   //}
-  //int id=0;
-  //int p3=(int)pow(3,nholes);
-  //for(kko=0;kko<idx;++kko){
-  //  for(ii=0;ii<(int)pow(3,nholes);++ii){
-  //    iii=ii;
-  //    id=0;
-  //    p3=(int)pow(3,nholes);
-  //    for(kk=0;kk<3;++kk){
-  //        id += p3 * (iii%3);
-  //        p3 /= 3;
-  //        iii=iii/3;
-  //    }
-  //    int idhole = id;
-  //    projvec[(iroot)*idx + kko] += projvecmat[idhole*idx + kko]; 
-  //  }
-  //}
-
-  //for(kko=0;kko<idx;++kko){
-  //  printf("%d) %10.15f\n",kko,projvec[(iroot)*idx + kko]);
-  //}
+  //printf("\n");
 
   // Free dictionary
   dictionary_free(d);

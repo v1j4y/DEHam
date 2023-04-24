@@ -111,6 +111,7 @@ int main(int argc,char **argv)
 //    = (getdata.natom - getdata.ntrou + 2*getdata.isz)/2;
   int               nstates = get_nstates(getdata.ntrou,nalpha);
   double            projvec[getdata.nroots*nstates], weightproj=0.0;
+  double            projvec2[getdata.nroots*nstates];
   double            projvecfin[getdata.nroots*nstates];
   //double            densmat2[getdata.natom][getdata.natom][getdata.natom][getdata.natom];
   ////double            *densmat2;
@@ -237,6 +238,77 @@ int main(int argc,char **argv)
     PetscViewerDestroy(&viewer);
   }
 
+
+  /*
+   * Read projection vectors
+   */
+  int rowm, colm;
+  if (mpiid == 0) {
+    const char *filename;
+    if(getdata.ntrou==2){
+      filename="dettocsf20.txt";
+    }
+    else if(getdata.ntrou==3){
+      filename="dettocsf30.txt";
+    }
+    else if(getdata.ntrou==4){
+      filename="dettocsf40.txt";
+    }
+    FILE* file = fopen(filename, "r");
+    fscanf(file, "%d", &rowm);
+    fscanf(file, "%d", &colm);
+    fclose(file);
+  }
+
+  // Broadcast row col to all processes
+  MPI_Bcast(&rowm, 1, MPI_INT, 0, MPI_COMM_WORLD);
+  MPI_Bcast(&colm, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+  //double projmatrix[rowm][colm];
+  double *projmatrix;
+  if (mpiid == 0) {
+    const char *filename;
+    if(getdata.ntrou==2){
+      filename="dettocsf20.txt";
+    }
+    else if(getdata.ntrou==3){
+      filename="dettocsf30.txt";
+    }
+    else if(getdata.ntrou==4){
+      filename="dettocsf40.txt";
+    }
+    FILE* file = fopen(filename, "r");
+    fscanf(file, "%d", &rowm);
+    fscanf(file, "%d", &colm);
+    
+    printf(" mpiid=%d row=%d col=%d\n",mpiid,rowm,colm);
+    projmatrix = (double *)malloc(rowm * colm * sizeof(double));
+    for (int ik = 0; ik < rowm; ik++) {
+        for (int jk = 0; jk < colm; jk++) {
+            fscanf(file, "%lf", &projmatrix[ik*colm + jk]);
+        }
+    }
+    fclose(file);
+    for(int ik=0;ik<6;++ik){
+      for(int jk=0;jk<6;++jk){
+        double projfac = projmatrix[ik * colm + jk];
+        if(projfac < 0.0){
+          projfac = - sqrt(-projfac);
+        }
+        else{
+          projfac = sqrt(projfac);
+        }
+        projmatrix[ik*colm + jk] = projfac;
+        printf("%8.4f ",projmatrix[ik*colm + jk]);
+      }
+      printf("\n");
+    }
+  }
+
+  // Broadcast matrix to all processes
+  MPI_Bcast(projmatrix, rowm*colm, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+
   /*
    * now analyzing the eigenvector
    */
@@ -286,26 +358,31 @@ int main(int argc,char **argv)
           //get_2rdm(values, &Istart, &Iend, &getdata.natom, &trace2rdm, natomax);
           //get_proj_9_3h(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
           //get_proj(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax);
-          get_proj_general(values, &Istart, &Iend, &getdata.natom, i, projvec, natomax,getdata.ntrou,nalpha,getdata.ntrou);
+          MPI_Reduce(&xymat, &xymatfin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
+          MPI_Reduce(&norm, &normfin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
+          if(!mpiid){
+            XS=(1.0/2.0)*(-1.0+sqrt(1.0+(4.0*xymatfin/normfin)));
+          }
+          get_proj_general(values, &Istart, &Iend, &getdata.natom, i, projvec, projvec2, natomax,getdata.ntrou,nalpha,getdata.ntrou,XS,colm,projmatrix);
 //        analyse_(valxr, (Iend-Istart), &Istart, &Iend, &xymat, &norm);
           VecRestoreArray(vec2,&values);
           ierr = VecRestoreArray(xr, &valxr);CHKERRQ(ierr);
-          MPI_Reduce(&xymat, &xymatfin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
+          //MPI_Reduce(&xymat, &xymatfin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&xymat2, &xymatfin2, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&xymat3, &xymatfin3, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&xymat4, &xymatfin4, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&weight3, &weight3fin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
-          MPI_Reduce(&norm, &normfin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&norm2, &normfin2, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&norm3, &normfin3, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&norm4, &normfin4, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           MPI_Reduce(&trace1rdm, &trace1rdmfin, 1, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
-          MPI_Reduce(&projvec, &projvecfin, getdata.nroots*nstates, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
+          MPI_Reduce(&projvec2, &projvecfin, getdata.nroots*nstates, MPI_DOUBLE, MPI_SUM, 0, PETSC_COMM_WORLD);
           weightproj = 0.0;
           if(mpiid==0){
-          for(ii=0;ii<nstates;++ii) weightproj += projvecfin[(i)*nstates + ii]*projvecfin[(i)*nstates+ii];
+            for(ii=0;ii<nstates;++ii) weightproj += projvecfin[(i)*nstates + ii];
           //for(ii=0;ii<nstates;++ii)
           //  printf("(here) %10.15f \n",projvecfin[(i)*nstates + ii]);
+            weightproj = fabs(weightproj);
           }
 //          printf("done calc densmat\n");
 //          for(ll=0;ll<getdata.natom/2;ll++){
